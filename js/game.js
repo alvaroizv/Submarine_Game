@@ -4,6 +4,7 @@ import { GameSubmarine } from "./GameSubmarine.js";
 
 const board = new Board();
 
+//Definimos las variables para la interfaz gráfica,sus eventos y generamos el tablero dinámicanete.
 UI.init({
   board: "gameBoard",
   status: "gameStatus",
@@ -11,14 +12,16 @@ UI.init({
   columns_number: 8,
 });
 
-const gameInstance = new GameSubmarine(UI);
-
 UI.setEvent({
   btnShot: ["btnShot", () => gameInstance.shot()],
 });
 
 UI.generateBoard(8);
 
+//Conectamos el submarino junto con la Interfaz Gráfica
+const gameInstance = new GameSubmarine(UI);
+
+//Inicializamos el Tablero, que tendrá como atributo el submarino.
 board.innit({
   size: UI.control.columns_number,
   submarine_Instance: gameInstance,
