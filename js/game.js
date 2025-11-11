@@ -14,6 +14,7 @@ UI.setEvent({
 });
 
 UI.generateBoard(8);
+
 /* Esto es otra forma, cuidado con la perdida del contexto this.
 /*
 UI.setEvent({
