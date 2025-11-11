@@ -4,11 +4,13 @@ export const UI = {
     template: null,
     board: null,
     status: null,
+    columns_number: null,
   },
   init: (domControl, game) => {
     UI.control.board = document.getElementById(domControl.board);
     UI.control.status = document.getElementById(domControl.status);
     UI.control.template = document.getElementById(domControl.template);
+    UI.control.columns_number = domControl.columns_number;
   },
   setEvent: (domControl) => {
     document
@@ -24,13 +26,16 @@ export const UI = {
   changeStatus(newStatus) {
     UI.control.status.textContent = newStatus;
   },
-  generateBoard(columns_number) {
-    UI.control.board.style.gridTemplateColumns = `repeat(${columns_number}, 1fr)`;
-    for (let index = 0; index < columns_number * columns_number; index++) {
+  generateBoard() {
+    UI.control.board.style.gridTemplateColumns = `repeat(${UI.control.columns_number}, 1fr)`;
+    for (
+      let index = 0;
+      index < UI.control.columns_number * UI.control.columns_number;
+      index++
+    ) {
       const clonated_template = UI.control.template.content.cloneNode(true);
       const box = clonated_template.querySelector(".box");
       box.textContent = index + 1;
-
       UI.control.board.appendChild(box);
     }
   },
