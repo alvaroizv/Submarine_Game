@@ -1,14 +1,19 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Plantilla de juego</title>
-</head>
-<body>
-    <div id="gameBoard"></div>
+    <link href="styles.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="gameBoard">
+      <template id="box-template">
+        <div class="box"></div>
+      </template>
+    </div>
     <div id="gameStatus"></div>
     <div id="btnShot">Disparar</div>
     <script src="./js/game.js" type="module"></script>
-</body>
+  </body>
 </html>
