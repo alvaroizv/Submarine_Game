@@ -14,14 +14,14 @@ UI.init({
   y: "num_y",
 });
 
+//Creamos el Submarino
+const gameInstance = new GameSubmarine(UI);
+
 UI.setEvent({
   btnShot: ["btnShot", () => gameInstance.shot()],
 });
 
 UI.generateBoard(8);
-
-//Conectamos el submarino junto con la Interfaz Gráfica
-const gameInstance = new GameSubmarine(UI);
 
 //Inicializamos el Tablero, que tendrá como atributo el submarino.
 board.innit({
