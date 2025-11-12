@@ -6,11 +6,19 @@ export const UI = {
     status: null,
     columns_number: null,
   },
+  userActivity: {
+    inputX: null,
+    inputY: null,
+  },
   init: (domControl, game) => {
     UI.control.board = document.getElementById(domControl.board);
     UI.control.status = document.getElementById(domControl.status);
     UI.control.template = document.getElementById(domControl.template);
     UI.control.columns_number = domControl.columns_number;
+
+    //Asiganmos a los atributos de UI el contenido que tengan los inputs:
+    UI.userActivity.inputX = document.getElementById(domControl.x);
+    UI.userActivity.inputY = document.getElementById(domControl.y);
   },
   setEvent: (domControl) => {
     document

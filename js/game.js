@@ -10,6 +10,8 @@ UI.init({
   status: "gameStatus",
   template: "box-template",
   columns_number: 8,
+  x: "num_x",
+  y: "num_y",
 });
 
 UI.setEvent({
