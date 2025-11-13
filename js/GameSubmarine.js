@@ -16,7 +16,11 @@ export class GameSubmarine {
   movement() {
     //Reduzco rastos antiguos, en la primera llamada no hará nada
     this.UIControl.reduceInnerContent();
-
+    // Le asigno a la vieja casilla el 3
+    this.UIControl.changeInnerContent(
+      this.currentCelda.positionX,
+      this.currentCelda.positionY
+    );
     //Randomizamos el numero que va a salir basado en los índices array de Vecinos de la casilla
     let movimiento = Math.floor(
       Math.random() * this.currentCelda.arrayVecinos.length
@@ -25,11 +29,6 @@ export class GameSubmarine {
     this.posX = this.currentCelda.arrayVecinos[movimiento].positionX;
     this.posY = this.currentCelda.arrayVecinos[movimiento].positionY;
     this.setPosition(this.currentCelda.arrayVecinos[movimiento]);
-    // Le asigno a la nueva casilla el 3
-    this.UIControl.changeInnerContent(
-      this.currentCelda.positionX,
-      this.currentCelda.positionY
-    );
   }
 
   shot() {
@@ -58,5 +57,6 @@ export class GameSubmarine {
   setPosition(currentCelda) {
     //Asignamos la celda al submarino
     this.currentCelda = currentCelda;
+    console.log(this.currentCelda);
   }
 }
