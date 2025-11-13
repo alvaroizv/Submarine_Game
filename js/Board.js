@@ -35,6 +35,8 @@ class Board {
         item.positionX === this.properSubmarine.posX &&
         item.positionY === this.properSubmarine.posY
     );
+
+    this.properSubmarine.setPosition(celda);
   }
 
   getVecinos(celda_selected) {
