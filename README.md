@@ -4,6 +4,9 @@ En primer lugar me he desenvolvido bien con la plantilla, pues atendí bastante 
 Cuando veas mi proyecto, verás algunas cosas como que he utilizado un Set, simplemente lo he utilizado porque ví en Mozilla.JS, concretamente en la sección Array.from a Set. No te preocupes que he aprendido lo que es.
 
 Pasando al otro plato fuerte de mi proyecto, he "intentado" utilizar el patrón de diseño Facade, aunque, viendo la web que vimos en clase, sobre cómo lo explicaba, lo veo algo escueto. Pero bueno, ya me comentarás.
+Para su realización simplemente he pillado toda la lógica que tenía en el game.js (lo que para mi es el main) y la he pasado a otra clase con varios métodos que se llaman entre sí.
+
+He de decir también que el Facade ha sido lo último que he hecho, ya que basandome en la manera en la que lo he realizado era lo que más sentio tenía.
 
 He intentado recrear la fórmula de los vecinos que tu utilizastes, aunque, en vez de copiar y pegar de nuestras otras versiones, he decidido intentarlo por mi mismo, ya que el tema de los enums y tal no es mi fuerte.
 
