@@ -14,12 +14,17 @@ class Board {
     this.maxY = this.maxX;
     console.log("Board Created");
 
-    let malla = Array.from({ length: this.maxX }, (v, i) =>
+    let malla = Array.from({ length: this.maxX + 1 }, (v, i) =>
       Array.from({ length: this.maxX }, (v, j) => new Celda(i, j))
     );
 
     //Aplanamos la malla y le asiganmos el tablero
     this.tablero = malla.flat();
+
+    //Colocamos los vecinos a cada celda.
+    this.tablero.forEach((celda, i) => {
+      this.getVecinos(celda);
+    });
 
     //Coloco al submarino en una casilla aleatoria de mi tablero.
     this.properSubmarine.initialmovement();
@@ -30,7 +35,6 @@ class Board {
         item.positionX === this.properSubmarine.posX &&
         item.positionY === this.properSubmarine.posY
     );
-    this.getVecinos(celda);
   }
 
   getVecinos(celda_selected) {
@@ -42,23 +46,26 @@ class Board {
 
     let vecinoDown = this.tablero.find(
       (item) =>
-        item.positionX === celda_selected.positionX + 1 &&
-        item.positionY === celda_selected.positionY
+        item.positionX === celda_selected.positionX &&
+        item.positionY === celda_selected.positionY - 1
     );
 
     let vecinoLeft = this.tablero.find(
       (item) =>
-        item.positionX === celda_selected.positionX + 1 &&
+        item.positionX === celda_selected.positionX - 1 &&
         item.positionY === celda_selected.positionY
     );
 
     let vecinoRight = this.tablero.find(
       (item) =>
-        item.positionX === celda_selected.positionX + 1 &&
-        item.positionY === celda_selected.positionY
+        item.positionX === celda_selected.positionX &&
+        item.positionY === celda_selected.positionY + 1
     );
 
-    console.log(vecinoUp);
+    const set = new Set([vecinoUp, vecinoDown, vecinoLeft, vecinoRight]);
+    let arrayVecinos = Array.from(set);
+
+    celda_selected.setVecinos(arrayVecinos.filter((item) => item != undefined));
   }
 }
 
