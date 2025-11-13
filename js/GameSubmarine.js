@@ -9,18 +9,27 @@ export class GameSubmarine {
 
   initialmovement() {
     //Generamos un número aleatorio que determine la posición X e Y de manera inicial
-    this.posX = 0;
-    this.posY = 0;
+    this.posX = this.getRandomInt();
+    this.posY = this.getRandomInt();
   }
 
   movement() {
+    //Reduzco rastos antiguos, en la primera llamada no hará nada
+    this.UIControl.reduceInnerContent();
+
+    //Randomizamos el numero que va a salir basado en los índices array de Vecinos de la casilla
     let movimiento = Math.floor(
       Math.random() * this.currentCelda.arrayVecinos.length
     );
+    //Reconfiguramos la posición x e y del submarino y le asigamos su nueva celda.
     this.posX = this.currentCelda.arrayVecinos[movimiento].positionX;
     this.posY = this.currentCelda.arrayVecinos[movimiento].positionY;
-
     this.setPosition(this.currentCelda.arrayVecinos[movimiento]);
+    // Le asigno a la nueva casilla el 3
+    this.UIControl.changeInnerContent(
+      this.currentCelda.positionX,
+      this.currentCelda.positionY
+    );
   }
 
   shot() {
@@ -41,13 +50,10 @@ export class GameSubmarine {
   }
   getRandomInt() {
     //Generamos un número aleatorio, redondenadolo y estableciendo como máxima el número de columnas +1, para que pueda salir la última columna
-    return Math.floor(
-      Math.random() * this.UIControl.control.columns_number + 1
-    );
+    return Math.floor(Math.random() * this.UIControl.control.columns_number);
   }
 
   setPosition(currentCelda) {
     this.currentCelda = currentCelda;
-    console.log(currentCelda);
   }
 }

@@ -43,8 +43,29 @@ export const UI = {
     ) {
       const clonated_template = UI.control.template.content.cloneNode(true);
       const box = clonated_template.querySelector(".box");
-      box.textContent = index + 1;
+      box.textContent = `${Math.floor(index / UI.control.columns_number)},${
+        index % UI.control.columns_number
+      }`;
       UI.control.board.appendChild(box);
+    }
+  },
+  changeInnerContent(x, y) {
+    let arrayBoxes = document.getElementsByClassName("box");
+    for (let index = 0; index < arrayBoxes.length; index++) {
+      if (arrayBoxes[index].textContent === `${x},${y}`) {
+        arrayBoxes[index].textContent = 3;
+      }
+    }
+  },
+  reduceInnerContent() {
+    let arrayBoxes = document.getElementsByClassName("box");
+    for (let index = 0; index < arrayBoxes.length; index++) {
+      if (
+        arrayBoxes[index].textContent <= 3 &&
+        arrayBoxes[index].textContent != 0
+      ) {
+        arrayBoxes[index].textContent--;
+      }
     }
   },
 };

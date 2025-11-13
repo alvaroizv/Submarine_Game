@@ -14,7 +14,7 @@ class Board {
     this.maxY = this.maxX;
     console.log("Board Created");
 
-    let malla = Array.from({ length: this.maxX + 1 }, (v, i) =>
+    let malla = Array.from({ length: this.maxX }, (v, i) =>
       Array.from({ length: this.maxX }, (v, j) => new Celda(i, j))
     );
 
