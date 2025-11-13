@@ -11,7 +11,7 @@ He de decir también que el Facade ha sido lo último que he hecho, ya que basan
 He intentado recrear la fórmula de los vecinos que tu utilizastes, aunque, en vez de copiar y pegar de nuestras otras versiones, he decidido intentarlo por mi mismo, ya que el tema de los enums y tal no es mi fuerte.
 
 Otras complicaciones que se me han dado es hacer el rastro, pues al tener que atacar la interfaz no tenía tan claro el orden lógico de el cambio del contenido en dicha UI.
-También lo he realizado atacando directamente a la UI, lo que luego me ha dado que pensar diversas mejoras que verás más adelante
+Esto luego me ha dado que pensar diversas mejoras que verás más adelante
 
 Además, he tenido bastantes quebraderos de cabeza con obtener el valor de los inputs del usuario, ya que en un primer momento, los tenía en tipo texto en vez de en numérico, y luego se me ocurrió en mi "gran idea" 
 poner que su valor se obtenga directamente al inicializar la interfaz, FALLO GARRAFAL, pues el valor era nulo, y siempre me salía undefined o NaN.....
