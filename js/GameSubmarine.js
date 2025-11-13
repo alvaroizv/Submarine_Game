@@ -38,8 +38,10 @@ export class GameSubmarine {
       this.posX === parseInt(this.UIControl.userActivity.inputX.value) &&
       this.posY === parseInt(this.UIControl.userActivity.inputY.value)
     ) {
+      //Si se ha movido marcamos el mensaje de que ha acertado
       this.UIControl.changeStatus("Has dado en el clavo tio");
     } else {
+      //Si no, nos reimos de él y movemos el submarino
       this.UIControl.changeStatus(
         "¡Has fallado pringado!, el submarino se ha movido"
       );
@@ -54,6 +56,7 @@ export class GameSubmarine {
   }
 
   setPosition(currentCelda) {
+    //Asignamos la celda al submarino
     this.currentCelda = currentCelda;
   }
 }

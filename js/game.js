@@ -12,6 +12,7 @@ UI.init({
   columns_number: 8,
   x: "num_x",
   y: "num_y",
+  restart_button: "restart",
 });
 
 //Creamos el Submarino
@@ -19,6 +20,7 @@ const gameInstance = new GameSubmarine(UI);
 
 UI.setEvent({
   btnShot: ["btnShot", () => gameInstance.shot()],
+  restart: ["restart", () => gameInstance.restart()],
 });
 
 UI.generateBoard(8);
@@ -28,10 +30,3 @@ board.innit({
   size: UI.control.columns_number,
   submarine_Instance: gameInstance,
 });
-
-/* Esto es otra forma, cuidado con la perdida del contexto this.
-/*
-UI.setEvent({
-    btnShot: ['btnShot', gameInstance.shot.bind(gameInstance)]
-});
-*/

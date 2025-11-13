@@ -5,6 +5,7 @@ export const UI = {
     board: null,
     status: null,
     columns_number: null,
+    restart: null,
   },
   userActivity: {
     inputX: null,
@@ -15,6 +16,7 @@ export const UI = {
     UI.control.status = document.getElementById(domControl.status);
     UI.control.template = document.getElementById(domControl.template);
     UI.control.columns_number = domControl.columns_number;
+    UI.control.restart = document.getElementById(domControl.restart_button);
 
     //Asiganmos a los atributos de UI el contenido que tengan los inputs:
     UI.userActivity.inputX = document.getElementById(domControl.x);
@@ -25,6 +27,11 @@ export const UI = {
       .getElementById(domControl.btnShot[0])
       .addEventListener("click", () => {
         domControl.btnShot[1]();
+      });
+    document
+      .getElementById(domControl.restart[0])
+      .addEventListener("click", () => {
+        domControl.restart[1]();
       });
   },
   start(game) {
@@ -66,6 +73,14 @@ export const UI = {
       ) {
         arrayBoxes[index].textContent--;
       }
+    }
+  },
+  restartInnerContent() {
+    let arrayBoxes = document.getElementsByClassName("box");
+    for (let index = 0; index < arrayBoxes.length; index++) {
+      arrayBoxes[index].textContent = `${Math.floor(
+        index / UI.control.columns_number
+      )},${index % UI.control.columns_number}`;
     }
   },
 };
