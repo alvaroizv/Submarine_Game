@@ -19,10 +19,10 @@ Me llevo una sensación amarga, como tú miles de veces nos has dicho, me quedo 
 
 Seguiré trabajando en mi casa una o varias versiones, ya que he detectado estas 4 mejoras:
 
-  -Poner 3 modos con 3 botones, y luego ya desplegar el teclado
-  -Botón de Reinicio
-  -Hacer algo con las casillas que se rellenan con 0 (Y si pasa por una que ya ha estado, el rastro se pierde ???)
-  -Refactorización de Clases, con la creación de nuevas o moviendo algunas
+  - Poner 3 modos con 3 botones, y luego ya desplegar el teclado
+  - Botón de Reinicio
+  - Hacer algo con las casillas que se rellenan con 0 (Y si pasa por una que ya ha estado, el rastro se pierde ???)
+  - Refactorización de Clases, con la creación de nuevas o moviendo algunas
 
 Por último te tengo que comentar que he intentado lo del reinicio (te he dejado la función en UI.js), pero no me ha dado tiempo del todo y era un poco mierdón, pues se quedaba bastante roto luego de darle y no limpiaba todo bien.
 Luego he intentado hacerlo con el Facade pero tampoco he tenido mucho éxito ya que no sabía limpiar el tablero previo y luego crear un nuevo "juego"
