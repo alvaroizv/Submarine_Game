@@ -65,7 +65,6 @@ export const UI = {
   },
   sequence: async () => {
     for ( let item of UI.indexList){
-      
         await UI.pushKey(
         UI.initial_quarter[item],
         UI.status.ON
