@@ -1,0 +1,35 @@
+.container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+#teclaAzul,
+#teclaRoja,
+#teclaAmarillo,
+#teclaVerde {
+  cursor: pointer;
+  width: 25vw;
+  height: 25vw;
+}
+
+#teclaAzul{
+  border-top-left-radius: 180px;
+  background-color: lightblue;
+}
+
+#teclaRoja{
+  border-top-right-radius: 180px;
+  background-color: lightcoral;
+}
+
+#teclaAmarillo{
+  border-bottom-right-radius: 180px;
+  background-color: lightyellow;
+}
+
+#teclaVerde{
+  border-bottom-left-radius: 180px;
+  background-color: lightgreen;
+}
