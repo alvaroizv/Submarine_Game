@@ -46,9 +46,8 @@ export class Simon {
   };
 
   addMoreKeys = () => {
-    let random = Math.floor(
-      Math.random() * this.UIControl.initial_quarter.length - 1
-    );
+    let random = Math.floor((Math.random() * this.UIControl.initial_quarter.length) - 1);
+
     this.UIControl.indexList.push(random);
     console.log(this.UIControl.indexList);
     this.UIControl.play();
@@ -60,19 +59,20 @@ export class Simon {
 
   voiceRecognition = () =>{
    this.recognition = new SpeechRecognition();
-   this.recognition.continuous = false;
+   this.recognition.continuous = true;
    this.recognition.lang = "en-US";
    this.recognition.interimResults = false;
    this.recognition.maxAlternatives = 1;
 
    this.recognition.onresult = (event) =>{
-    
+    for (let speechers of event.results){
+          console.log(speechers);
+    }
   }
 
   this.recognition.onspeechend = () => {
-    let result = this.recognition.stop();
-
-    console.log(result);
+    console.log("deteniendose")
+    this.recognition.stop();
   };
 
   }
