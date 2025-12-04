@@ -46,7 +46,7 @@ export class Simon {
   };
 
   addMoreKeys = () => {
-    let random = Math.floor((Math.random() * this.UIControl.initial_quarter.length) - 1);
+    let random = Math.floor((Math.random() * this.UIControl.initial_quarter.length));
 
     this.UIControl.indexList.push(random);
     console.log(this.UIControl.indexList);
