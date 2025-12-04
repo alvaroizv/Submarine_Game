@@ -4,7 +4,7 @@ export const UI = {
   message: null,
   initial_quarter: [],
   indexList: [],
-  busy: false,
+  busy: true,
 
   divKeys: {
     yellow: null,

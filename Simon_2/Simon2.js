@@ -1,13 +1,14 @@
-const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-const SpeechRecognitionEvent = window.SpeechRecognitionEvent || window.webkitSpeechRecognitionEvent;
-
+const SpeechRecognition =
+  window.SpeechRecognition || window.webkitSpeechRecognition;
+const SpeechRecognitionEvent =
+  window.SpeechRecognitionEvent || window.webkitSpeechRecognitionEvent;
 
 export class Simon {
   constructor(UI) {
     this.UIControl = UI;
     this.userSequence = [];
     this.setSequence();
-    this.colorSelection = ["green","blue","yellow","red"];
+    this.colorSelection = ["green", "blue", "yellow", "red"];
 
     /*Invocamos a el reconocedor de Voz de la API*/
     this.voiceRecognition();
@@ -46,7 +47,9 @@ export class Simon {
   };
 
   addMoreKeys = () => {
-    let random = Math.floor((Math.random() * this.UIControl.initial_quarter.length));
+    let random = Math.floor(
+      Math.random() * this.UIControl.initial_quarter.length
+    );
 
     this.UIControl.indexList.push(random);
     console.log(this.UIControl.indexList);
@@ -57,23 +60,22 @@ export class Simon {
     this.UIControl.indexList = [0, 1];
   };
 
-  voiceRecognition = () =>{
-   this.recognition = new SpeechRecognition();
-   this.recognition.continuous = true;
-   this.recognition.lang = "en-US";
-   this.recognition.interimResults = false;
-   this.recognition.maxAlternatives = 1;
+  voiceRecognition = () => {
+    let finishingRes = [];
+    let resultados = [];
+    this.recognition = new SpeechRecognition();
+    this.recognition.continuous = true;
+    this.recognition.lang = "en-US";
+    this.recognition.interimResults = false;
+    this.recognition.maxAlternatives = 1;
 
-   this.recognition.onresult = (event) =>{
-    for (let speechers of event.results){
-          console.log(speechers);
-    }
-  }
+    this.recognition.onresult = (event) => {
+       console.log(event.results[0][0].transcript);
+       resultados = event.results;
+    };
 
-  this.recognition.onspeechend = () => {
-    console.log("deteniendose")
-    this.recognition.stop();
+    this.recognition.onspeechend = () => {
+      console.log(resultados);
+    };
   };
-
-  }
 }
