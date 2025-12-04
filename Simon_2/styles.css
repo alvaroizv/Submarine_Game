@@ -1,4 +1,4 @@
-.container{
+.container {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -10,26 +10,49 @@
 #teclaAmarillo,
 #teclaVerde {
   cursor: pointer;
-  width: 25vw;
-  height: 25vw;
+  width: 10vw;
+  height: 10vw;
 }
 
-#teclaAzul{
+#teclaAzul {
   border-top-left-radius: 180px;
   background-color: lightblue;
 }
 
-#teclaRoja{
+#teclaRoja {
   border-top-right-radius: 180px;
   background-color: lightcoral;
 }
 
-#teclaAmarillo{
+#teclaAmarillo {
   border-bottom-right-radius: 180px;
   background-color: lightyellow;
 }
 
-#teclaVerde{
+#teclaVerde {
   border-bottom-left-radius: 180px;
   background-color: lightgreen;
+}
+
+.button-container {
+  gap: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.status {
+  font-size: 2.4rem;
+  margin-top: 3rem;
+  background: transparent;
+  padding: 1rem;
+  border: 1px solid black;
+  text-align: center;
+  cursor: pointer;
+}
+
+#msg {
+  margin-top: 3rem;
+  font-size: 2.3rem;
+  color: black;
 }
