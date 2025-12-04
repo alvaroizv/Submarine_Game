@@ -1,8 +1,16 @@
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+const SpeechRecognitionEvent = window.SpeechRecognitionEvent || window.webkitSpeechRecognitionEvent;
+
+
 export class Simon {
   constructor(UI) {
     this.UIControl = UI;
     this.userSequence = [];
     this.setSequence();
+    this.colorSelection = ["green","blue","yellow","red"];
+
+    /*Invocamos a el reconocedor de Voz de la API*/
+    this.voiceRecognition();
   }
 
   pushUserSequence = (index) => {
@@ -49,4 +57,21 @@ export class Simon {
   setSequence = () => {
     this.UIControl.indexList = [0, 1];
   };
+
+  voiceRecognition = () =>{
+   this.recognition = new SpeechRecognition();
+   this.recognition.continuous = false;
+   this.recognition.lang = "en-US";
+   this.recognition.interimResults = false;
+   this.recognition.maxAlternatives = 1;
+
+   this.recognition.onresult = (event) =>{
+    
+  }
+
+  this.recognition.onspeechend = () => {
+    this.recognition.stop();
+  };
+
+  }
 }

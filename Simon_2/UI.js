@@ -32,6 +32,7 @@ export const UI = {
   setButton: (button) => {
     UI.button = document.getElementById(button.id);
     UI.button.addEventListener("click", () => {
+      UI.simonGame.recognition.start();
       UI.changeElementView(UI.button, "none");
       UI.changeElementView(UI.message, "none");
       UI.play();
