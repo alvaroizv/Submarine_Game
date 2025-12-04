@@ -1,7 +1,7 @@
 import { UI } from "./UI.js";
 import { Simon } from "./Simon2.js";
 import { splitText } from './node_modules/animejs/dist/modules/text/split.js';
-import { createTimeline, stagger, utils } from 'https://esm.sh/animejs';
+import { createTimeline, stagger } from 'https://esm.sh/animejs';
 
 
 UI.init([
