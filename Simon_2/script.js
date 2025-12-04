@@ -1,7 +1,5 @@
 import { UI } from "./UI.js";
 import { Simon } from "./Simon2.js";
-import { animate } from "animejs";
-
 UI.init([
   {
     id: "teclaAmarillo",

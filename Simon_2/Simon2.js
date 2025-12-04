@@ -6,14 +6,15 @@ export class Simon {
   }
 
   pushUserSequence = (index) => {
-    this.userSequence.push(index);
-    this.checkUserSequence();
+    if (!this.UIControl.busy) {
+      this.userSequence.push(index);
+      this.checkUserSequence();
+    }
   };
 
   checkUserSequence = () => {
     console.log(this.userSequence);
     let revision = true;
-
     for (let index = 0; index < this.userSequence.length; index++) {
       if (this.userSequence[index] != this.UIControl.indexList[index]) {
         this.UIControl.changeMessage("Has perdido mequetrefe");

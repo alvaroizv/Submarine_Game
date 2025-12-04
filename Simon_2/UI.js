@@ -4,6 +4,7 @@ export const UI = {
   message: null,
   initial_quarter: [],
   indexList: [],
+  busy: false,
 
   divKeys: {
     yellow: null,
@@ -62,10 +63,12 @@ export const UI = {
   },
 
   play: async () => {
+    UI.busy = true;
     for (let item of UI.indexList) {
       await UI.pushKey(UI.initial_quarter[item], UI.status.ON);
       await UI.pushKey(UI.initial_quarter[item], UI.status.OFF);
     }
+    UI.busy = false;
   },
   pushKey: (selectedKey, status) => {
     return new Promise((resolve) => {
