@@ -70,7 +70,9 @@ export class Simon {
   }
 
   this.recognition.onspeechend = () => {
-    this.recognition.stop();
+    let result = this.recognition.stop();
+
+    console.log(result);
   };
 
   }
