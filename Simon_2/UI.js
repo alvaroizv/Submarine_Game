@@ -1,3 +1,11 @@
+import {
+  animate,
+  spring,
+  createTimeline,
+  stagger,
+} from "https://esm.sh/animejs";
+import { splitText } from "./node_modules/animejs/dist/modules/text/split.js";
+
 export const UI = {
   simonGame: null,
   button: null,
@@ -26,10 +34,14 @@ export const UI = {
     for (let item of UI.initial_quarter) {
       item.id = document.getElementById(item.id);
     }
+
+    /*Añadimos el evento a todas las teclas a traves de un bucle for*/
     UI.addEvent();
+    UI.animateText();
   },
 
   setButton: (button) => {
+    /*Añadimos el boton como propiedad del UI y su evento correspondiente*/
     UI.button = document.getElementById(button.id);
     UI.button.addEventListener("click", () => {
       UI.simonGame.recognition.start();
@@ -40,6 +52,7 @@ export const UI = {
   },
 
   changeElementView: (element, status) => {
+    /*Cambiamos visibilidad, ya sea para mostrar u ocultar un elemento*/
     element.style.display = status;
   },
 
@@ -58,6 +71,15 @@ export const UI = {
   addEvent: () => {
     for (let item of UI.initial_quarter) {
       item.id.addEventListener("click", () => {
+        /*Animacion al pulsar las teclas*/
+        animate(item.id, {
+          rotate: "+=360",
+          duration: 700,
+          ease: spring({
+            bounce: 0.5,
+            duration: 700,
+          }),
+        });
         UI.simonGame.pushUserSequence(UI.initial_quarter.indexOf(item));
       });
     }
@@ -82,5 +104,34 @@ export const UI = {
         resolve(true);
       }, 2000);
     });
+  },
+
+  animateText: () => {
+    /*Animación de anime.js */
+    /*Mi elemento lo obtiene splitText ('p'), que selecciona todos los p de mi HTML automáticamente*/
+    const { words, chars } = splitText("p", {
+      words: { wrap: "clip" },
+      chars: true,
+    });
+
+    createTimeline({
+      loop: true,
+      defaults: { ease: "inOut(3)", duration: 650 },
+    })
+      .add(
+        words,
+        {
+          y: [($el) => (+$el.dataset.line % 2 ? "100%" : "-100%"), "0%"],
+        },
+        stagger(125)
+      )
+      .add(
+        chars,
+        {
+          y: ($el) => (+$el.dataset.line % 2 ? "100%" : "-100%"),
+        },
+        stagger(10, { from: "random" })
+      )
+      .init();
   },
 };
