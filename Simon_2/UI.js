@@ -102,13 +102,13 @@ export const UI = {
         selectedKey.id.style.backgroundColor =
           status === UI.status.ON ? selectedKey.colorOn : selectedKey.colorOff;
         resolve(true);
-      }, 2000);
+      }, 1000);
     });
   },
 
   animateText: () => {
     /*Animación de anime.js */
-    /*Mi elemento lo obtiene splitText ('p'), que selecciona todos los p de mi HTML automáticamente*/
+    /*Mi elemento lo obtiene splitText ('p'), que selecciona el primer "p" de mi HTML automáticamente*/
     const { words, chars } = splitText("p", {
       words: { wrap: "clip" },
       chars: true,
