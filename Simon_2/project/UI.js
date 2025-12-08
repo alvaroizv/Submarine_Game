@@ -4,7 +4,7 @@ import {
   createTimeline,
   stagger,
 } from "https://esm.sh/animejs";
-import { splitText } from "./node_modules/animejs/dist/modules/text/split.js";
+import { splitText } from "./libs/node_modules/animejs/dist/modules/text/split.js";
 
 export const UI = {
   simonGame: null,
