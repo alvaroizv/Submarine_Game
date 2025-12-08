@@ -66,28 +66,44 @@ export class Simon {
   };
 
   setSequence = () => {
+    /*Reutilizamos la misma función de añadir teclas directamente, para evitar duplicidad del código*/
     this.addMoreKeys();
   };
 
   voiceRecognition = () => {
-    let resultados = null;
+    let result = null;
+    /*Inicializamos el reconocimiento de voz y ajustamos su configuración correspondiente*/
     this.recognition = new SpeechRecognition();
     this.recognition.continuous = false;
-    this.recognition.lang = "en-US";
+    this.recognition.lang = "es-ES";
     this.recognition.interimResults = false;
     this.recognition.maxAlternatives = 1;
 
+    /*Indicamos acciones que debe realizar una vez escuche palabras*/
     this.recognition.onresult = (event) => {
-      console.log(event.results[0][0].transcript);
-      resultados = event.results;
+      this.result = event.results[0][0].transcript;
     };
-
+    /*Indicamos acciones que debe realizar una vez que finalice la escucha*/
     this.recognition.onspeechend = () => {
       console.log("Escucha terminada");
-      recognition.stop();
+      this.recognition.stop();
+      this.checkWord(this.result);
     };
+     /*Indicamos acciones que debe realizar si ha dado algún tipo de error */
     this.recognition.onerror = () => {
       console.log("No he entendido lo que dices");
     };
+  };
+
+  checkWord = (userWord) => {
+    console.log(userWord);
+     /*Buscamos en el array de teclas si hay una con ese color */
+    let voiceKey = this.UIControl.initial_quarter.find(
+      (element) => element.speechColor.toUpperCase() === userWord.toUpperCase()
+    );
+    /* Si la encuentra, la encendemos y apagamos respectivamente con dicho metodo */
+     if(voiceKey != undefined){
+      this.UIControl.illuminateKey(voiceKey);
+     }
   };
 }

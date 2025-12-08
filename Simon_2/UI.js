@@ -37,18 +37,8 @@ export const UI = {
 
     /*Añadimos el evento a todas las teclas a traves de un bucle for*/
     UI.addEvent();
+    /*Animamos el texto del botón de Jugar.*/
     UI.animateText();
-  },
-
-  setButton: (button) => {
-    /*Añadimos el boton como propiedad del UI y su evento correspondiente*/
-    UI.button = document.getElementById(button.id);
-    UI.button.addEventListener("click", () => {
-      UI.simonGame.recognition.start();
-      UI.changeElementView(UI.button, "none");
-      UI.changeElementView(UI.message, "none");
-      UI.play();
-    });
   },
 
   changeElementView: (element, status) => {
@@ -66,6 +56,22 @@ export const UI = {
 
   initGame: (game) => {
     UI.simonGame = game;
+  },
+
+  setEvent: (domControl) => {
+    /*Guardo el boton ya que luego lo necesito para ocultarlo/mostrarlo*/
+    UI.button = document.getElementById(domControl.playBtn[0]);
+    document
+      .getElementById(domControl.playBtn[0])
+      .addEventListener("click", () => {
+        domControl.playBtn[1]();
+      });
+
+    document
+      .getElementById(domControl.voiceBtn[0])
+      .addEventListener("click", () => {
+        domControl.voiceBtn[1]();
+      });
   },
 
   addEvent: () => {
@@ -86,7 +92,9 @@ export const UI = {
   },
 
   play: async () => {
+    /*Cambiamos al estado ocupado y luego a libre*/
     UI.busy = true;
+    /*De manera asíncrona, vamos encendiendo y apagando las luces, siempre esperandose unas a otras (await) mediante Promesas */
     for (let item of UI.indexList) {
       await UI.pushKey(UI.initial_quarter[item], UI.status.ON);
       await UI.pushKey(UI.initial_quarter[item], UI.status.OFF);
@@ -96,6 +104,7 @@ export const UI = {
   pushKey: (selectedKey, status) => {
     return new Promise((resolve) => {
       setTimeout(() => {
+        /*Obtenemos el color y segun el estado de la ficha en concreto le ponemos uno u otro */
         let color = selectedKey.colorOff;
         if (status === UI.status.ON) color = selectedKey.colorOn;
 
@@ -104,6 +113,12 @@ export const UI = {
         resolve(true);
       }, 1000);
     });
+  },
+
+  /*Metodo para iluminar una tecla por voz */
+  illuminateKey: async (selectedKey) => {
+    await UI.pushKey(selectedKey, UI.status.ON);
+    await UI.pushKey(selectedKey, UI.status.OFF);
   },
 
   animateText: () => {
