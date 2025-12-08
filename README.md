@@ -1,3 +1,6 @@
+***PRACTICA 2: SIMON**
+---
+**PRACTICA 1 : SUBMARINO**
 Buenas noches Raul. Acabo de terminar la primera práctica y quiero comentarte como ha ido.
 
 En primer lugar me he desenvolvido bien con la plantilla, pues atendí bastante cuando la explicastes y no me ha resultado un problema. 
