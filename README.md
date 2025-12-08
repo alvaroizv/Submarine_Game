@@ -1,4 +1,4 @@
-***PRACTICA 2: SIMON**
+**PRACTICA 2: SIMON**
 ---
 **PRACTICA 1 : SUBMARINO**
 Buenas noches Raul. Acabo de terminar la primera práctica y quiero comentarte como ha ido.
