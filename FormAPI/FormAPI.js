@@ -1,10 +1,10 @@
 export class FormAPI {
   controlForm = null;
+  uiControl = null;
 
-  constructor(formId) {
-    this.formId = formId;
+  constructor(ui) {
     this.controlForm = [];
-    this.form = document.getElementById(formId);
+    this.uiControl = ui;
   }
 
   addInput(name, type, placeholder, required) {
@@ -16,11 +16,14 @@ export class FormAPI {
       requiree: required,
       regularExpression: regularExpression,
     });
-    this.createElementInput(name, type, placeholder, required);
+    this.uiControl.createElementInput(name, type, placeholder, required);
   }
 
   buildForm() {
     // this.controlForm.forEach(inputData => {
   }
 
+  clearFormInput(name) {
+    this.uiControl.clearFormInput(name);
+  }
 }
