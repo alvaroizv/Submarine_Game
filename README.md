@@ -1,3 +1,34 @@
+**PRACTICA 2: SIMÓN**
+Buenos días/tardes/noches, Raúl, dependiendo de la hora a la que mires esto.
+
+En cuanto a la realización del proyecto, no me ha parecido excesivamente compleja, pues al haber visto en clase las Promesas y la separación UI–Lógica, no me ha resultado tan difícil.
+
+También es verdad que la primera versión que hice del Simón fue todo junto en una clase y sin Promesas. Pero, al trabajar antes de tiempo, la lógica ya la tenía en mente desde el primer momento en el que empecé, algo que, sin haberlo valorado previamente, me ha ayudado mucho para esta versión definitiva.
+
+Sobre todo, me ha servido mucho tu estrategia enseñada en clase: empezar pasito a pasito y luego ir a cosas más grandes.
+
+Donde he tenido algunos quebraderos de cabeza ha sido con el tema de las APIs/librerías:
+
+Por parte de anime.js, la verdad es que los ejemplos que ponían eran demasiado complejos y específicos, y no encajaban mucho con la idea del Simón. Para aprender a utilizar la animación que hay en el juego (la vuelta de 360 grados), he tenido que leer la documentación de dicha API. Tampoco ha sido tedioso, pero no estaba tan al alcance como pensaba.
+
+La he importado de manera local mediante npm install y también usando URLs que apuntan al sitio web. No sé cuál es la más correcta, pero la verdad es que poner la ruta relativa entera no me parece lo más rápido.
+
+El caso totalmente contrario me ha sucedido con WebSpeech API, donde, con la poca documentación que había en Mozilla JS, estaba tan bien concentrada que me ha servido para realizar las pruebas por voz.
+
+Eso sí, se me ha quedado en el tintero jugar con la secuencia, pues investigando descubrí que con la propiedad continuous puedes permitir la escucha de más de una palabra a la vez. Pero claro, no sabía cómo recoger los resultados para después procesarlos y “sustituirlos” por lo que serían los clics (esto último sí que lo sabría hacer, pero no cómo obtener esos datos).
+
+Al tener una palabra por instancia, también había pensado en ir diciendo cada color continuamente, pero luego lo vi demasiado tosco y poco intuitivo para el usuario, por lo que lo he dejado estar esperando tu validación/consejo.
+
+Para que el usuario detecte que ha tocado las teclas, he añadido el giro. Me habría gustado poner alguna luz, pero pensé que podría llegar a confundirse fácilmente con lo que es la secuencia de la máquina.
+
+Y poco más, la verdad. He intentado utilizar un método para poner los eventos correspondientes, pero al asignar directamente el array a las teclas en el método init, no sabía cómo separar de ahí los diferentes botones si los metía.
+
+Como opinión personal, me ha gustado mucho hacer este proyecto y he aprendido bastante. Te parecerá raro o no, pero cada día me gusta más aprender sobre programación y codificar.
+
+Un saludo,
+Álvaro Becerril Robles
+---
+**PRACTICA 1 : SUBMARINO**
 Buenas noches Raul. Acabo de terminar la primera práctica y quiero comentarte como ha ido.
 
 En primer lugar me he desenvolvido bien con la plantilla, pues atendí bastante cuando la explicastes y no me ha resultado un problema. 
