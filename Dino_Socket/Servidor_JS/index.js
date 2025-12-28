@@ -12,13 +12,20 @@ const io = new Server({
   }
 });
 
+// Adjuntamos el servidor a socket.IO
 io.attachApp(app);
 
+
+//Establecemos un evento al conectarse una persona
 io.on("connection", (socket) => {
   console.log("Ha llegado nueva conexion");
-  socket.on("move", (socket)=>{
+
+  //Cuando al servidor le llegue un evento de tipo move,hace lo siguiente
+  socket.on("move", (datos)=>{
         console.log("Nuevo movimiento");
+
         usuarios.forEach(element => {
+          /*Todos los sockets emiten un evento de tipo move*/
             element.emit("move",{contenido:"se ha movido"});
         });
     });
@@ -31,6 +38,7 @@ io.on("connection", (socket) => {
 
 
 
+// Lo ponemos a escuchar en el puerto 3000
 app.listen(3000, (token) => {
     console.log("escuchando por el puerto 3000");
   if (!token) {
