@@ -63,36 +63,45 @@ let scoreText = null;
 let bombs = null;
 
 function create() {
+
+   //Declaración de variables
+  score = 0;
+  cursors = this.input.keyboard.createCursorKeys();
+
   // Configuración mundo y cámara
 
   //Hacemos que el límite del juego sea 5000 de ancho y no los 800 de la pantalla.
   this.physics.world.setBounds(0, 0, 5000, 600);
 
-  //La cámara seguirá al jugador
+   //La cámara seguirá al jugador
   this.cameras.main.setBounds(0, 0, 5000, 600);
 
   //Cambiamos el cielo a un tileSprite para que se repita constantemente:
   this.add.tileSprite(0, 0, 5000, 600, "sky").setOrigin(0, 0);
 
   //Cargamos texto de Score:
-  score = 0;
   scoreText = this.add.text(16, 16, "score: 0", {
     fontSize: "32px",
     fill: "#000",
   });
+  
+  //Hacemos que se mantenga fijo a la izquierda
+  scoreText.setScrollFactor(0);
 
   // Metemos fisicas a las plataformas
   platforms = this.physics.add.staticGroup();
 
   // Escalamos la imagen x2 ya que sino no ocupa todo el ancho de la pantala, reseteamos el sistema de físicas.
-  platforms.create(400, 568, "ground").setScale(2).refreshBody();
+  platforms.create(400, 568, "ground").setScale(13,2).refreshBody();
   platforms.create(600, 400, "ground");
   platforms.create(50, 250, "ground");
   platforms.create(750, 220, "ground");
 
-  //Creamos la lógica del jugador
-  player = this.physics.add.sprite(100, 450, "dude");
+  //Declaramos aqui el jugador porque sino se queda detrás de las anteriores capas
+   player = this.physics.add.sprite(100, 450, "dude");
 
+   //Le asignamos a la cámara que siga al jugador.
+   this.cameras.main.startFollow(player);
   //Valor de Rebote
   player.setBounce(0.2);
 
@@ -103,7 +112,6 @@ function create() {
   player.body.setGravityY(300);
 
   //Definimos los cursores y sus animaciones correspondientes:
-  cursors = this.input.keyboard.createCursorKeys();
   this.anims.create({
     key: "left",
     frames: this.anims.generateFrameNumbers("dude", { start: 0, end: 3 }),
@@ -124,13 +132,13 @@ function create() {
     repeat: -1,
   });
 
-  //Creación de Estrellas
+  //
+  //Creación de Estrellas y asignamos rebote.
   stars = this.physics.add.group({
     key: "star",
     repeat: 11,
     setXY: { x: 12, y: 0, stepX: 70 },
   });
-
   stars.children.iterate(function (child) {
     child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
   });
