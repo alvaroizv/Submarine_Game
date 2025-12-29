@@ -63,10 +63,16 @@ let scoreText = null;
 let bombs = null;
 
 function create() {
-  cursors = this.input.keyboard.createCursorKeys();
+  // Configuración mundo y cámara
 
-  // El orden de carga importa, utiliza un sistema de capas
-  this.add.image(400, 300, "sky");
+  //Hacemos que el límite del juego sea 5000 de ancho y no los 800 de la pantalla.
+  this.physics.world.setBounds(0, 0, 5000, 600);
+
+  //La cámara seguirá al jugador
+  this.cameras.main.setBounds(0, 0, 5000, 600);
+
+  //Cambiamos el cielo a un tileSprite para que se repita constantemente:
+  this.add.tileSprite(0, 0, 5000, 600, "sky").setOrigin(0, 0);
 
   //Cargamos texto de Score:
   score = 0;
@@ -83,16 +89,21 @@ function create() {
   platforms.create(600, 400, "ground");
   platforms.create(50, 250, "ground");
   platforms.create(750, 220, "ground");
+
   //Creamos la lógica del jugador
   player = this.physics.add.sprite(100, 450, "dude");
+
   //Valor de Rebote
   player.setBounce(0.2);
 
-  //Esto es para que colisione con los límites del juego
+  //Colisiona con los límites del juego
   player.setCollideWorldBounds(true);
 
+  // Le ajustamos una Gravedad
   player.body.setGravityY(300);
-  //Definimos animaciones
+
+  //Definimos los cursores y sus animaciones correspondientes:
+  cursors = this.input.keyboard.createCursorKeys();
   this.anims.create({
     key: "left",
     frames: this.anims.generateFrameNumbers("dude", { start: 0, end: 3 }),
@@ -131,7 +142,6 @@ function create() {
   this.physics.add.collider(player, platforms);
   this.physics.add.collider(stars, platforms);
   this.physics.add.collider(bombs, platforms);
-
   this.physics.add.collider(player, bombs, hitBomb, null, this);
 
   this.physics.add.overlap(player, stars, collectStar, null, this);
@@ -154,7 +164,10 @@ function collectStar(player, star) {
     });
 
     // Si el jugador esta en una posicion menor a 400 creamos una bomba en su lado contrario y viceversa
-    var x = player.x < 400  ? Phaser.Math.Between(400, 800)  : Phaser.Math.Between(0, 400);
+    var x =
+      player.x < 400
+        ? Phaser.Math.Between(400, 800)
+        : Phaser.Math.Between(0, 400);
     //Creamos una bomba en la posicion dada por x , y = 16, y la textura bomb
     var bomb = bombs.create(x, 16, "bomb");
     bomb.setBounce(1);
