@@ -49,10 +49,13 @@ function preload() {
   this.load.image("star", "./assets/star.png");
   this.load.image("bomb", "./assets/bomb.png");
   this.load.image("rock", "./assets/rock.png");
-  this.load.image("bird", "./assets/bird.gif");
-  this.load.spritesheet("dude", "./assets/dude.png", {
-    frameWidth: 32,
-    frameHeight: 48,
+  this.load.spritesheet("bird", "./assets/BirdSprite.png",{
+    frameWidth: 16,
+    frameHeight: 16,
+  });
+  this.load.spritesheet("dude", "./assets/DinoSprites-doux.png", {
+    frameWidth: 24,
+    frameHeight: 24,
   });
 }
 
@@ -65,6 +68,7 @@ let scoreText = null;
 let bombs = null;
 let rocks = null;
 let birds = null;
+let gameOver = false;
 
 function create() {
   //Declaración de variables
@@ -94,11 +98,27 @@ function create() {
   // Metemos fisicas a las plataformas
   platforms = this.physics.add.staticGroup();
 
-  // Escalamos la imagen x2 ya que sino no ocupa todo el ancho de la pantala, reseteamos el sistema de físicas.
+  // Suelo principal
   platforms.create(400, 568, "ground").setScale(13, 2).refreshBody();
-  platforms.create(600, 400, "ground");
-  platforms.create(50, 250, "ground");
-  platforms.create(750, 220, "ground");
+
+  //Otras plataformas aleatoriamente:
+  let xActual = 500;  
+  let yActual = 450;  
+
+for (let i = 0; i < 20; i++) {
+    // Avanzamos en X de forma constante
+    xActual += 250;
+
+    // Cambiamos la Y solo un poco hacia arriba o hacia abajo (-80 a 80)
+    yActual += Phaser.Math.Between(-80, 80);
+
+    // Limites para que las plataformas no se salgan del cielo o del suelo
+    if (yActual < 200) yActual = 250; 
+    if (yActual > 480) yActual = 400;
+
+    // Creamos la plataforma con el tamaño reducido
+    platforms.create(xActual, yActual, "ground").setScale(0.5, 1).refreshBody();
+}
 
   //Declaramos aqui el jugador porque sino se queda detrás de las anteriores capas
   player = this.physics.add.sprite(100, 450, "dude");
@@ -107,6 +127,7 @@ function create() {
   this.cameras.main.startFollow(player);
   //Valor de Rebote
   player.setBounce(0.2);
+  player.setScale(2);
 
   //Colisiona con los límites del juego
   player.setCollideWorldBounds(true);
@@ -117,33 +138,37 @@ function create() {
   //Definimos los cursores y sus animaciones correspondientes:
   this.anims.create({
     key: "left",
-    frames: this.anims.generateFrameNumbers("dude", { start: 0, end: 3 }),
+    frames: this.anims.generateFrameNumbers("dude", { start: 4, end: 9 }),
     frameRate: 10,
     repeat: -1,
   });
 
   this.anims.create({
     key: "turn",
-    frames: [{ key: "dude", frame: 4 }],
+    frames: [{ key: "dude", frame: 0 }],
     frameRate: 20,
   });
 
   this.anims.create({
     key: "right",
-    frames: this.anims.generateFrameNumbers("dude", { start: 5, end: 8 }),
+    frames: this.anims.generateFrameNumbers("dude", { start: 4, end: 9 }),
     frameRate: 10,
     repeat: -1,
   });
 
-  //Creación de Estrellas y asignamos rebote.
-  stars = this.physics.add.group({
-    key: "star",
-    repeat: 11,
-    setXY: { x: 12, y: 0, stepX: 70 },
-  });
-  stars.children.iterate(function (child) {
-    child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
-  });
+  this.anims.create({
+    key: "dead",
+    frames: [{ key: "dude", frame: 14 }],
+    frameRate: 20,
+  })
+
+  // Animación del pájaro
+  this.anims.create({
+        key: "fly",
+        frames: this.anims.generateFrameNumbers("bird", { start: 9, end: 17 }),
+        frameRate: 12,
+        repeat: -1,
+    });
 
   //Creamos las rocas del juego
   rocks = this.physics.add.group({
@@ -160,16 +185,24 @@ function create() {
   });
 
   //Creamos los pájaros del juego
-  birds = this.physics.add.staticGroup();
+  birds = this.physics.add.group();
 
   //Colocamos los pájaros de manera aleatoria
-  for (let i = 0; i < 30; i++) {
-    let x = Phaser.Math.Between(400, 4900);
-    let y = Phaser.Math.Between(200, 400); 
+  for (let i = 0; i < 5  ; i++) {
+    let x = Phaser.Math.Between(800, 5000);
+    let y = Phaser.Math.Between(100, 400);
 
     let bird = birds.create(x, y, "bird");
 
-    bird.refreshBody();
+    // Activamos animación
+    bird.anims.play("fly", true);
+    // Los escalamos a x2 y le quitamos la gravedad
+    bird.setScale(2);
+    bird.body.allowGravity = false;
+
+    //Le damos velocidad hacia la izquierda
+    bird.setVelocityX(Phaser.Math.Between(-150, -250));
+
   }
 
   //Creación de Bombas:
@@ -177,44 +210,12 @@ function create() {
 
   //Detectores de colisiones :
   this.physics.add.collider(player, platforms);
-  this.physics.add.collider(stars, platforms);
   this.physics.add.collider(bombs, platforms);
   this.physics.add.collider(rocks, platforms);
-  this.physics.add.collider(birds, platforms);
 
-  this.physics.add.overlap(player, stars, collectStar, null, this);
   this.physics.add.collider(player, bombs, hitObstacle, null, this);
   this.physics.add.collider(player, birds, hitObstacle, null, this);
   this.physics.add.overlap(player, rocks, hitObstacle, null, this);
-}
-
-//Esto es lo que pasa al coleccionar una Estrella
-function collectStar(player, star) {
-  //Desactivamos la Estrella
-  star.disableBody(true, true);
-  //Sumamos 10 al score y lo mostramos
-  score += 10;
-  scoreText.setText("Score: " + score);
-
-  //Si las estrellas se quedan en 10, lanzamos una bomba
-  //countActive es un metodo de grupo que cuenta el numero de elementos
-  if (stars.countActive(true) === 10) {
-    stars.children.iterate(function (child) {
-      //Volvemos a habilitar todas las estrellas y ponemos su Y a 0
-      child.enableBody(true, child.x, 0, true, true);
-    });
-
-    // Si el jugador esta en una posicion menor a 400 creamos una bomba en su lado contrario y viceversa
-    var x =
-      player.x < 400
-        ? Phaser.Math.Between(400, 800)
-        : Phaser.Math.Between(0, 400);
-    //Creamos una bomba en la posicion dada por x , y = 16, y la textura bomb
-    var bomb = bombs.create(x, 16, "bomb");
-    bomb.setBounce(1);
-    bomb.setCollideWorldBounds(true);
-    bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
-  }
 }
 
 // Lo que pasa si el jugador impacta con una bomba
@@ -222,22 +223,24 @@ function hitObstacle(player, bomb) {
   //Detenemos el juego y pintamos al jugador de rojo
   this.physics.pause();
 
-  player.setTint(0xff0000);
-
-  player.anims.play("turn");
+ player.anims.play("dead", true);
 
   gameOver = true;
 }
 
 function update() {
+
+  if (gameOver) return;
   //Lógica de cursores
   if (cursors.left.isDown) {
     player.setVelocityX(-160);
+    //Giramos el sprite del dinosaurio
+    player.setFlipX(true)
 
     player.anims.play("left", true);
   } else if (cursors.right.isDown) {
     player.setVelocityX(160);
-
+    player.setFlipX(false);
     player.anims.play("right", true);
   } else {
     player.setVelocityX(0);
@@ -246,6 +249,16 @@ function update() {
   }
 
   if (cursors.up.isDown && player.body.touching.down) {
-    player.setVelocityY(-330);
+    player.setVelocityY(-530);
   }
+
+  //Devolver el pájaro a su sitio si se sale de la pantalla
+  birds.children.iterate(function (bird) {
+        if (bird.x < -50) {
+            bird.x = 5050;
+
+            // Le damos una altura nueva para que no sea siempre igual
+            bird.y = Phaser.Math.Between(100, 400);
+        }
+    });
 }
