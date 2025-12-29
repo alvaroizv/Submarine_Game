@@ -49,6 +49,7 @@ function preload() {
   this.load.image("star", "./assets/star.png");
   this.load.image("bomb", "./assets/bomb.png");
   this.load.image("rock", "./assets/rock.png");
+  this.load.image("bird", "./assets/bird.gif");
   this.load.spritesheet("dude", "./assets/dude.png", {
     frameWidth: 32,
     frameHeight: 48,
@@ -63,10 +64,10 @@ let score = null;
 let scoreText = null;
 let bombs = null;
 let rocks = null;
+let birds = null;
 
 function create() {
-
-   //Declaración de variables
+  //Declaración de variables
   score = 0;
   cursors = this.input.keyboard.createCursorKeys();
 
@@ -75,7 +76,7 @@ function create() {
   //Hacemos que el límite del juego sea 5000 de ancho y no los 800 de la pantalla.
   this.physics.world.setBounds(0, 0, 5000, 600);
 
-   //La cámara seguirá al jugador
+  //La cámara seguirá al jugador
   this.cameras.main.setBounds(0, 0, 5000, 600);
 
   //Cambiamos el cielo a un tileSprite para que se repita constantemente:
@@ -94,16 +95,16 @@ function create() {
   platforms = this.physics.add.staticGroup();
 
   // Escalamos la imagen x2 ya que sino no ocupa todo el ancho de la pantala, reseteamos el sistema de físicas.
-  platforms.create(400, 568, "ground").setScale(13,2).refreshBody();
+  platforms.create(400, 568, "ground").setScale(13, 2).refreshBody();
   platforms.create(600, 400, "ground");
   platforms.create(50, 250, "ground");
   platforms.create(750, 220, "ground");
 
   //Declaramos aqui el jugador porque sino se queda detrás de las anteriores capas
-   player = this.physics.add.sprite(100, 450, "dude");
+  player = this.physics.add.sprite(100, 450, "dude");
 
-   //Le asignamos a la cámara que siga al jugador.
-   this.cameras.main.startFollow(player);
+  //Le asignamos a la cámara que siga al jugador.
+  this.cameras.main.startFollow(player);
   //Valor de Rebote
   player.setBounce(0.2);
 
@@ -144,12 +145,32 @@ function create() {
     child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
   });
 
-  //Creamos los cactus del juego
+  //Creamos las rocas del juego
   rocks = this.physics.add.group({
     key: "rock",
-    repeat: 15,
-    setXY: { x: 300, y: 521, stepX: 300 },
+    repeat: 29,
   });
+
+  rocks.children.iterate(function (child) {
+    //Colocamos las piedras de manera aleatoria
+    let x = Phaser.Math.Between(400, 4900);
+    child.setPosition(x, 520);
+
+    child.refreshBody();
+  });
+
+  //Creamos los pájaros del juego
+  birds = this.physics.add.staticGroup();
+
+  //Colocamos los pájaros de manera aleatoria
+  for (let i = 0; i < 30; i++) {
+    let x = Phaser.Math.Between(400, 4900);
+    let y = Phaser.Math.Between(200, 400); 
+
+    let bird = birds.create(x, y, "bird");
+
+    bird.refreshBody();
+  }
 
   //Creación de Bombas:
   bombs = this.physics.add.group();
@@ -159,9 +180,12 @@ function create() {
   this.physics.add.collider(stars, platforms);
   this.physics.add.collider(bombs, platforms);
   this.physics.add.collider(rocks, platforms);
-  this.physics.add.collider(player, bombs, hitBomb, null, this);
+  this.physics.add.collider(birds, platforms);
 
   this.physics.add.overlap(player, stars, collectStar, null, this);
+  this.physics.add.collider(player, bombs, hitObstacle, null, this);
+  this.physics.add.collider(player, birds, hitObstacle, null, this);
+  this.physics.add.overlap(player, rocks, hitObstacle, null, this);
 }
 
 //Esto es lo que pasa al coleccionar una Estrella
@@ -194,7 +218,7 @@ function collectStar(player, star) {
 }
 
 // Lo que pasa si el jugador impacta con una bomba
-function hitBomb(player, bomb) {
+function hitObstacle(player, bomb) {
   //Detenemos el juego y pintamos al jugador de rojo
   this.physics.pause();
 
