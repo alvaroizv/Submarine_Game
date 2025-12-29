@@ -19,8 +19,11 @@ var config = {
   scene: [GameScene, UIScene],
 };
 
-const socket = io("ws://localhost:3000");
+// Inicializamos el juego :
 const game = new Phaser.Game(config);
+
+
+const socket = io("ws://localhost:3000");
 
 socket.on("saludo", (dato) => {
   console.log("Ha llegado un nuevo dato");
