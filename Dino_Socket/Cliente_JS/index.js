@@ -76,6 +76,7 @@ let rocks = null;
 let birds = null;
 let gameOver = false;
 let flags = null;
+let gameWon = false;
 
 function create() {
   //Declaración de variables
@@ -94,7 +95,7 @@ function create() {
   this.add.tileSprite(0, 0, 5000, 600, "sky").setOrigin(0, 0);
 
   //Cargamos texto de Score:
-  scoreText = this.add.text(16, 16, "score: 0", {
+  scoreText = this.add.text(16, 16, "Touch the Flag to Win !", {
     fontSize: "32px",
     fill: "#000",
   });
@@ -248,6 +249,7 @@ function create() {
   this.physics.add.collider(player, bombs, hitObstacle, null, this);
   this.physics.add.collider(player, birds, hitObstacle, null, this);
   this.physics.add.overlap(player, rocks, hitObstacle, null, this);
+  this.physics.add.overlap(player, flags, finishGame, null, this);
 }
 
 // Lo que pasa si el jugador impacta con una bomba
@@ -258,6 +260,16 @@ function hitObstacle(player, bomb) {
   player.anims.play("dead", true);
 
   gameOver = true;
+}
+
+function finishGame(player,flag) {
+  this.physics.pause();
+  player.anims.play("turn",true);
+  gameWon = true;
+
+  //Cambiamos el texto de arriba a la izquierda a You Won!
+   scoreText.setText("You Won!")
+
 }
 
 function update() {
