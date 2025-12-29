@@ -161,27 +161,9 @@ export class GameScene extends Phaser.Scene {
     this.physics.add.collider(this.rocks, this.platforms);
     this.physics.add.collider(this.flags, this.platforms);
 
-    this.physics.add.collider(
-      this.player,
-      this.birds,
-      this.hitObstacle,
-      null,
-      this
-    );
-    this.physics.add.overlap(
-      this.player,
-      this.rocks,
-      this.hitObstacle,
-      null,
-      this
-    );
-    this.physics.add.overlap(
-      this.player,
-      this.flags,
-      this.finishGame,
-      null,
-      this
-    );
+    this.physics.add.collider(this.player,this.birds,this.hitObstacle,null,this);
+    this.physics.add.overlap(this.player,this.rocks,this.hitObstacle,null,this);
+    this.physics.add.overlap(this.player,this.flags,this.finishGame,null,this);
   }
 
   update() {
