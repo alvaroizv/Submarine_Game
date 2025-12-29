@@ -48,6 +48,7 @@ function preload() {
   this.load.image("ground", "./assets/platform.png");
   this.load.image("star", "./assets/star.png");
   this.load.image("bomb", "./assets/bomb.png");
+  this.load.image("rock", "./assets/rock.png");
   this.load.spritesheet("dude", "./assets/dude.png", {
     frameWidth: 32,
     frameHeight: 48,
@@ -61,6 +62,7 @@ let stars = null;
 let score = null;
 let scoreText = null;
 let bombs = null;
+let rocks = null;
 
 function create() {
 
@@ -84,7 +86,7 @@ function create() {
     fontSize: "32px",
     fill: "#000",
   });
-  
+
   //Hacemos que se mantenga fijo a la izquierda
   scoreText.setScrollFactor(0);
 
@@ -132,7 +134,6 @@ function create() {
     repeat: -1,
   });
 
-  //
   //Creación de Estrellas y asignamos rebote.
   stars = this.physics.add.group({
     key: "star",
@@ -143,6 +144,13 @@ function create() {
     child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
   });
 
+  //Creamos los cactus del juego
+  rocks = this.physics.add.group({
+    key: "rock",
+    repeat: 15,
+    setXY: { x: 300, y: 521, stepX: 300 },
+  });
+
   //Creación de Bombas:
   bombs = this.physics.add.group();
 
@@ -150,6 +158,7 @@ function create() {
   this.physics.add.collider(player, platforms);
   this.physics.add.collider(stars, platforms);
   this.physics.add.collider(bombs, platforms);
+  this.physics.add.collider(rocks, platforms);
   this.physics.add.collider(player, bombs, hitBomb, null, this);
 
   this.physics.add.overlap(player, stars, collectStar, null, this);
