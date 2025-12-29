@@ -49,13 +49,19 @@ function preload() {
   this.load.image("star", "./assets/star.png");
   this.load.image("bomb", "./assets/bomb.png");
   this.load.image("rock", "./assets/rock.png");
-  this.load.spritesheet("bird", "./assets/BirdSprite.png",{
+  this.load.spritesheet("bird", "./assets/BirdSprite.png", {
     frameWidth: 16,
     frameHeight: 16,
   });
+
   this.load.spritesheet("dude", "./assets/DinoSprites-doux.png", {
     frameWidth: 24,
     frameHeight: 24,
+  });
+
+  this.load.spritesheet("flag", "./assets/flag_animation.png", {
+    frameWidth: 60,
+    frameHeight: 60,
   });
 }
 
@@ -69,6 +75,7 @@ let bombs = null;
 let rocks = null;
 let birds = null;
 let gameOver = false;
+let flags = null;
 
 function create() {
   //Declaración de variables
@@ -99,13 +106,13 @@ function create() {
   platforms = this.physics.add.staticGroup();
 
   // Suelo principal
-  platforms.create(400, 568, "ground").setScale(13, 2).refreshBody();
+  platforms.create(2500, 568, "ground").setScale(13, 2).refreshBody();
 
   //Otras plataformas aleatoriamente:
-  let xActual = 500;  
-  let yActual = 450;  
+  let xActual = 500;
+  let yActual = 450;
 
-for (let i = 0; i < 20; i++) {
+  for (let i = 0; i < 20; i++) {
     // Avanzamos en X de forma constante
     xActual += 250;
 
@@ -113,12 +120,12 @@ for (let i = 0; i < 20; i++) {
     yActual += Phaser.Math.Between(-80, 80);
 
     // Limites para que las plataformas no se salgan del cielo o del suelo
-    if (yActual < 200) yActual = 250; 
+    if (yActual < 200) yActual = 250;
     if (yActual > 480) yActual = 400;
 
     // Creamos la plataforma con el tamaño reducido
     platforms.create(xActual, yActual, "ground").setScale(0.5, 1).refreshBody();
-}
+  }
 
   //Declaramos aqui el jugador porque sino se queda detrás de las anteriores capas
   player = this.physics.add.sprite(100, 450, "dude");
@@ -160,35 +167,60 @@ for (let i = 0; i < 20; i++) {
     key: "dead",
     frames: [{ key: "dude", frame: 14 }],
     frameRate: 20,
-  })
+  });
 
   // Animación del pájaro
   this.anims.create({
-        key: "fly",
-        frames: this.anims.generateFrameNumbers("bird", { start: 9, end: 17 }),
-        frameRate: 12,
-        repeat: -1,
-    });
+    key: "fly",
+    frames: this.anims.generateFrameNumbers("bird", { start: 9, end: 17 }),
+    frameRate: 12,
+    repeat: -1,
+  });
+
+  // Animación de la Bandera
+  this.anims.create({
+    key: "ondulate",
+    frames: this.anims.generateFrameNumbers("flag", { start: 0, end: 5 }),
+    frameRate: 12,
+    repeat: -1, 
+  })
 
   //Creamos las rocas del juego
-  rocks = this.physics.add.group({
-    key: "rock",
-    repeat: 29,
-  });
+  rocks = this.physics.add.group();
 
-  rocks.children.iterate(function (child) {
-    //Colocamos las piedras de manera aleatoria
-    let x = Phaser.Math.Between(400, 4900);
-    child.setPosition(x, 520);
+  let xRocaActual = 600;
+  //Rocas del Suelo
+  for (let i = 0; i < 80; i++) {
+    xRocaActual += Phaser.Math.Between(200, 400);
 
-    child.refreshBody();
-  });
+    if (xRocaActual < 4900) {
+      let rock = rocks.create(xRocaActual, 520, "rock");
+
+      rock.body.setSize(20, 20);
+
+      rock.refreshBody();
+    }
+  }
+
+  //Rocas de las plataformas
+  let xRocaCielo = 600;
+  for (let i = 0; i < 25; i++) {
+    xRocaCielo += Phaser.Math.Between(120, 200);
+
+    if (xRocaCielo < 4900) {
+      let rock = rocks.create(xRocaCielo, 0, "rock");
+
+      rock.body.setSize(20, 20);
+
+      rock.refreshBody();
+    }
+  }
 
   //Creamos los pájaros del juego
   birds = this.physics.add.group();
 
   //Colocamos los pájaros de manera aleatoria
-  for (let i = 0; i < 5  ; i++) {
+  for (let i = 0; i < 5; i++) {
     let x = Phaser.Math.Between(800, 5000);
     let y = Phaser.Math.Between(100, 400);
 
@@ -202,16 +234,16 @@ for (let i = 0; i < 20; i++) {
 
     //Le damos velocidad hacia la izquierda
     bird.setVelocityX(Phaser.Math.Between(-150, -250));
-
   }
 
-  //Creación de Bombas:
-  bombs = this.physics.add.group();
+  //Creamos la Bandera
+  flags = this.physics.add.sprite(4950, 450, "flag");
+  flags.anims.play("ondulate",true);
 
   //Detectores de colisiones :
   this.physics.add.collider(player, platforms);
-  this.physics.add.collider(bombs, platforms);
   this.physics.add.collider(rocks, platforms);
+  this.physics.add.collider(flags,platforms);
 
   this.physics.add.collider(player, bombs, hitObstacle, null, this);
   this.physics.add.collider(player, birds, hitObstacle, null, this);
@@ -223,23 +255,22 @@ function hitObstacle(player, bomb) {
   //Detenemos el juego y pintamos al jugador de rojo
   this.physics.pause();
 
- player.anims.play("dead", true);
+  player.anims.play("dead", true);
 
   gameOver = true;
 }
 
 function update() {
-
   if (gameOver) return;
   //Lógica de cursores
   if (cursors.left.isDown) {
-    player.setVelocityX(-160);
+    player.setVelocityX(-500);
     //Giramos el sprite del dinosaurio
-    player.setFlipX(true)
+    player.setFlipX(true);
 
     player.anims.play("left", true);
   } else if (cursors.right.isDown) {
-    player.setVelocityX(160);
+    player.setVelocityX(500);
     player.setFlipX(false);
     player.anims.play("right", true);
   } else {
@@ -249,16 +280,16 @@ function update() {
   }
 
   if (cursors.up.isDown && player.body.touching.down) {
-    player.setVelocityY(-530);
+    player.setVelocityY(-430);
   }
 
   //Devolver el pájaro a su sitio si se sale de la pantalla
   birds.children.iterate(function (bird) {
-        if (bird.x < -50) {
-            bird.x = 5050;
+    if (bird.x < -50) {
+      bird.x = 5050;
 
-            // Le damos una altura nueva para que no sea siempre igual
-            bird.y = Phaser.Math.Between(100, 400);
-        }
-    });
+      // Le damos una altura nueva para que no sea siempre igual
+      bird.y = Phaser.Math.Between(100, 400);
+    }
+  });
 }
