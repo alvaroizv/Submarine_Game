@@ -224,8 +224,9 @@ export class GameScene extends Phaser.Scene {
     //Escuchamos si hay jugadores conectados previamente a nosotros
     this.socket.on("currentPlayers", (userList) => {
       userList.forEach((player) => {
+        
         //Nos aseguramos de que no sea el cliente actual para añadirlo
-        if (player.id != this.socket.id) this.addNewPlayer(player);  
+        if (player.playerId != this.socket.id) this.addNewPlayer(player);  
       });
     });
   }
