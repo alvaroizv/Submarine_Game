@@ -218,35 +218,14 @@ export class GameScene extends Phaser.Scene {
 
     //Escucha de eventos por si hay un jugador conectado
     this.socket.on("newPlayer", (data) => {
-      const otherPlayer = this.physics.add.sprite(data.x, data.y, "dude");
-
-      //Guardamos el socket id para indicar movimiento más adelante
-      otherPlayer.playerId = data.playerId;
-
-      //Fisicas y colisiones del nuevo Jugador (mismas que las de un jugador):
-      otherPlayer.setBounce(0.2);
-      otherPlayer.setScale(2);
-      otherPlayer.setCollideWorldBounds(true);
-      otherPlayer.body.setGravityY(300);
-
-      //Lo metemos a nuestro Grupo
-      this.otherPlayers.add(otherPlayer);
+      this.addNewPlayer(data);
     });
 
     //Escuchamos si hay jugadores conectados previamente a nosotros
     this.socket.on("currentPlayers", (userList) => {
       userList.forEach((player) => {
-        if (player.id != this.socket.id) {
-          const newPlayer = this.physics.add.sprite(player.x, player.y, "dude");
-
-          newPlayer.playerId = player.playerId;
-          newPlayer.setBounce(0.2);
-          newPlayer.setScale(2);
-          newPlayer.setCollideWorldBounds(true);
-          newPlayer.body.setGravityY(300);
-
-          this.otherPlayers.add(newPlayer);
-        }
+        //Nos aseguramos de que no sea el cliente actual para añadirlo
+        if (player.id != this.socket.id) this.addNewPlayer(player);  
       });
     });
   }
@@ -294,5 +273,22 @@ export class GameScene extends Phaser.Scene {
     this.gameWon = true;
 
     this.scene.get("UIScene").mostrarVictoria();
+  }
+
+  addNewPlayer(playerConfig){
+    //Creo el Sprite del nuevo jugador
+    const newPlayer = this.physics.add.sprite(playerConfig.x, playerConfig.y, "dude");
+
+    //Guardo su ID para más adelante en un nuevo atributo
+    newPlayer.playerId = playerConfig.playerId;
+
+    //Le asigno sus propieades correspondientes
+    newPlayer.setBounce(0.2);
+    newPlayer.setScale(2);
+    newPlayer.setCollideWorldBounds(true);
+    newPlayer.body.setGravityY(300);
+
+    //Lo añado al grupo para no perderlo
+    this.otherPlayers.add(newPlayer);
   }
 }
