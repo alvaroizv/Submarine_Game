@@ -1,4 +1,3 @@
-import { io } from "https://cdn.socket.io/4.8.1/socket.io.esm.min.js";
 // Importamos asi Phaser ya que el archivo en concreto no tiene objeto por defecto ni un objeto llamado Phaser, entonces obtenemos todo y lo metemos en un objeto nuevo.
 import * as Phaser from "./node_modules/phaser/dist/phaser.esm.js";
 import {GameScene} from "./GameScene.js";
@@ -23,7 +22,7 @@ var config = {
 const game = new Phaser.Game(config);
 
 
-const socket = io("ws://localhost:3000");
+
 
 socket.on("saludo", (dato) => {
   console.log("Ha llegado un nuevo dato");

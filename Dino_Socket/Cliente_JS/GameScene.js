@@ -1,11 +1,9 @@
 import * as Phaser from "./node_modules/phaser/dist/phaser.esm.js";
+import { io } from "https://cdn.socket.io/4.8.1/socket.io.esm.min.js";
 
 export class GameScene extends Phaser.Scene {
-  constructor() {
-    //Le pasamos una Key a la clase que será el identificador de toda la escena,
-    //  tanto si queremos reiniciar como obtener datos, etc ...
-    super({ key: "GameScene" });
-  }
+  //Conexión al Servidor
+  socket = io("ws://localhost:3000");
 
   platforms = null;
   player = null;
@@ -15,6 +13,12 @@ export class GameScene extends Phaser.Scene {
   gameOver = false;
   flags = null;
   gameWon = false;
+
+  constructor() {
+    //Le pasamos una Key a la clase que será el identificador de toda la escena,
+    //  tanto si queremos reiniciar como obtener datos, etc ...
+    super({ key: "GameScene" });
+  }
 
   preload() {
     // Aqui precargamos los recursos necesarios, que son las imagenes y spritesheets
@@ -66,6 +70,7 @@ export class GameScene extends Phaser.Scene {
       yActual += Phaser.Math.Between(-80, 80);
       if (yActual < 200) yActual = 250;
       if (yActual > 480) yActual = 400;
+
       this.platforms
         .create(xActual, yActual, "ground")
         .setScale(0.5, 1)
@@ -74,6 +79,7 @@ export class GameScene extends Phaser.Scene {
 
     // Declaramos aqui el jugador porque sino se queda detrás de las anteriores capas
     this.player = this.physics.add.sprite(100, 450, "dude");
+
     this.cameras.main.startFollow(this.player);
     this.player.setBounce(0.2);
     this.player.setScale(2);
@@ -161,9 +167,38 @@ export class GameScene extends Phaser.Scene {
     this.physics.add.collider(this.rocks, this.platforms);
     this.physics.add.collider(this.flags, this.platforms);
 
-    this.physics.add.collider(this.player,this.birds,this.hitObstacle,null,this);
-    this.physics.add.overlap(this.player,this.rocks,this.hitObstacle,null,this);
-    this.physics.add.overlap(this.player,this.flags,this.finishGame,null,this);
+    
+
+    this.physics.add.collider(
+      this.player,
+      this.birds,
+      this.hitObstacle,
+      null,
+      this
+    );
+    this.physics.add.overlap(
+      this.player,
+      this.rocks,
+      this.hitObstacle,
+      null,
+      this
+    );
+    this.physics.add.overlap(
+      this.player,
+      this.flags,
+      this.finishGame,
+      null,
+      this
+    );
+
+    //Una vez que todo el juego está cargado correctamente, miramos a ver si hay otros jugadores online
+    this.socket.on("newPlayer", (data) => {
+      this.newPlayer = this.physics.add.sprite(data.x, data.y, "dude");
+      this.newPlayer.setBounce(0.2);
+      this.newPlayer.setScale(2);
+      this.newPlayer.setCollideWorldBounds(true);
+      this.newPlayer.body.setGravityY(300);
+    });
   }
 
   update() {
@@ -208,7 +243,6 @@ export class GameScene extends Phaser.Scene {
     this.player.anims.play("turn", true);
     this.gameWon = true;
 
-    
     this.scene.get("UIScene").mostrarVictoria();
   }
 }
