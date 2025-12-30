@@ -166,9 +166,7 @@ export class GameScene extends Phaser.Scene {
     this.physics.add.collider(this.player, this.platforms);
     this.physics.add.collider(this.rocks, this.platforms);
     this.physics.add.collider(this.flags, this.platforms);
-
     
-
     this.physics.add.collider(
       this.player,
       this.birds,
@@ -191,13 +189,50 @@ export class GameScene extends Phaser.Scene {
       this
     );
 
-    //Una vez que todo el juego está cargado correctamente, miramos a ver si hay otros jugadores online
+    
+
+    // Creamos grupo de jugadores, ya que si lo hacemos desde una variable, al querer mover al primer jugador no lo tenemos guardado, pues se machaca su contenido
+    this.otherPlayers = this.physics.add.group();
+
+    this.physics.add.collider(this.otherPlayers, this.platforms);
+
+    this.physics.add.collider(
+      this.otherPlayers,
+      this.birds,
+      this.hitObstacle,
+      null,
+      this
+    );
+    this.physics.add.overlap(
+      this.otherPlayers,
+      this.rocks,
+      this.hitObstacle,
+      null,
+      this
+    );
+    this.physics.add.overlap(
+      this.otherPlayers,
+      this.flags,
+      this.finishGame,
+      null,
+      this
+    );
+
+    //Escucha de eventos por si hay un jugador conectado
     this.socket.on("newPlayer", (data) => {
-      this.newPlayer = this.physics.add.sprite(data.x, data.y, "dude");
-      this.newPlayer.setBounce(0.2);
-      this.newPlayer.setScale(2);
-      this.newPlayer.setCollideWorldBounds(true);
-      this.newPlayer.body.setGravityY(300);
+      const otherPlayer = this.physics.add.sprite(data.x, data.y, "dude");
+
+      //Guardamos el socket id para indicar movimiento más adelante
+      otherPlayer.playerId = data.playerId;
+
+      //Fisicas y colisiones del nuevo Jugador (mismas que las de un jugador):
+      otherPlayer.setBounce(0.2);
+      otherPlayer.setScale(2);
+      otherPlayer.setCollideWorldBounds(true);
+      otherPlayer.body.setGravityY(300);
+
+      //Lo metemos a nuestro Grupo
+      this.otherPlayers.add(otherPlayer);
     });
   }
 

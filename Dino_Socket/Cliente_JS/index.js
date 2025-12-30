@@ -22,23 +22,3 @@ var config = {
 const game = new Phaser.Game(config);
 
 
-
-
-socket.on("saludo", (dato) => {
-  console.log("Ha llegado un nuevo dato");
-  console.log(dato);
-});
-
-socket.on("nuevo", (dato) => {
-  console.log("Se ha conectado");
-});
-
-socket.on("move", (dato) => {
-  console.log("Se ha movido");
-});
-
-document.getElementById("boton").addEventListener("click", () => {
-  socket.emit("move", { x: 28, y: 34 });
-});
-
-
