@@ -166,7 +166,7 @@ export class GameScene extends Phaser.Scene {
     this.physics.add.collider(this.player, this.platforms);
     this.physics.add.collider(this.rocks, this.platforms);
     this.physics.add.collider(this.flags, this.platforms);
-    
+
     this.physics.add.collider(
       this.player,
       this.birds,
@@ -188,8 +188,6 @@ export class GameScene extends Phaser.Scene {
       null,
       this
     );
-
-    
 
     // Creamos grupo de jugadores, ya que si lo hacemos desde una variable, al querer mover al primer jugador no lo tenemos guardado, pues se machaca su contenido
     this.otherPlayers = this.physics.add.group();
@@ -233,6 +231,23 @@ export class GameScene extends Phaser.Scene {
 
       //Lo metemos a nuestro Grupo
       this.otherPlayers.add(otherPlayer);
+    });
+
+    //Escuchamos si hay jugadores conectados previamente a nosotros
+    this.socket.on("currentPlayers", (userList) => {
+      userList.forEach((player) => {
+        if (player.id != this.socket.id) {
+          const newPlayer = this.physics.add.sprite(player.x, player.y, "dude");
+
+          newPlayer.playerId = player.playerId;
+          newPlayer.setBounce(0.2);
+          newPlayer.setScale(2);
+          newPlayer.setCollideWorldBounds(true);
+          newPlayer.body.setGravityY(300);
+
+          this.otherPlayers.add(newPlayer);
+        }
+      });
     });
   }
 

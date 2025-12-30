@@ -19,6 +19,7 @@ io.attachApp(app);
 //Establecemos un evento al conectarse una persona
 io.on("connection", (socket) => {
   console.log("Nuevo dinosaurio conectado");
+
   //Metemos en el array de usuarios los datos del usuario
   usuarios.push({
     playerId: socket.id,
@@ -26,6 +27,9 @@ io.on("connection", (socket) => {
     y:450,
     flip:false,
   })
+
+  //Pasamos la lista de usuarios conectados para que genere los dinosaurios
+  socket.emit("currentPlayers",usuarios);
 
   //Aqui avisamos a los demas de que se ha conectado un nuevo usuario y le pasamos sus datos
   socket.broadcast.emit("newPlayer",usuarios.find((item) => item.playerId === socket.id ));
