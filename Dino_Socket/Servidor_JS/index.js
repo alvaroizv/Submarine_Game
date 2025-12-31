@@ -27,7 +27,10 @@ io.on("connection", (socket) => {
   });
 
   //Pasamos la lista de usuarios conectados para que genere los dinosaurios
-  socket.emit("currentPlayers", usuarios);
+  socket.on("playerReady",(args)=>{
+    socket.emit("currentPlayers", usuarios);
+  })
+  
 
   //Aqui avisamos a los demas de que se ha conectado un nuevo usuario y le pasamos sus datos
   // Con .broadcast para que no emita el mensaje al jugador que emitió ese mensaje

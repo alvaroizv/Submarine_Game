@@ -216,6 +216,8 @@ export class GameScene extends Phaser.Scene {
       this
     );
 
+    this.socket.emit("playerReady");
+
     //Escucha de eventos por si hay un jugador conectado
     this.socket.on("newPlayer", (data) => {
       this.addNewPlayer(data);
