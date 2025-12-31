@@ -237,9 +237,22 @@ export class GameScene extends Phaser.Scene {
         if (player.playerId === data.playerId) {
           player.x = data.x;
           player.y = data.y;
-          player.anims.play(data.anim,true);
+          player.anims.play(data.anim, true);
 
-          if(data.flipX != undefined) {
+          if (data.flipX != undefined) {
+            player.flipX = data.flipX;
+          }
+        }
+      });
+    });
+
+    this.socket.on("remove", (data) => {
+      this.otherPlayers.children.iterate((player) => {
+        if (player.playerId === data.playerId) {
+          
+
+
+          if (data.flipX != undefined) {
             player.flipX = data.flipX;
           }
         }
@@ -268,7 +281,7 @@ export class GameScene extends Phaser.Scene {
         x: this.player.x,
         y: this.player.y,
         anim: "right",
-        flipX: false
+        flipX: false,
       });
       this.player.anims.play("right", true);
     } else {
@@ -293,7 +306,6 @@ export class GameScene extends Phaser.Scene {
         bird.y = Phaser.Math.Between(100, 400);
       }
     });
-
   }
 
   hitObstacle(player, bomb) {

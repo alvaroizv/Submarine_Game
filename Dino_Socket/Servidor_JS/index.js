@@ -18,6 +18,7 @@ io.attachApp(app);
 //Establecemos un evento al conectarse una persona
 io.on("connection", (socket) => {
   console.log("Nuevo dinosaurio conectado");
+  console.log(usuarios);
 
   usuarios.push({
     playerId: socket.id,
@@ -27,28 +28,43 @@ io.on("connection", (socket) => {
   });
 
   //Pasamos la lista de usuarios conectados para que genere los dinosaurios
-  socket.on("playerReady",(args)=>{
+  socket.on("playerReady", (args) => {
     socket.emit("currentPlayers", usuarios);
-  })
-  
+  });
 
   //Aqui avisamos a los demas de que se ha conectado un nuevo usuario y le pasamos sus datos
   // Con .broadcast para que no emita el mensaje al jugador que emitió ese mensaje
-  socket.broadcast.emit("newPlayer",usuarios.find((item) => item.playerId === socket.id));
+  socket.broadcast.emit(
+    "newPlayer",
+    usuarios.find((item) => item.playerId === socket.id)
+  );
 
   //Recibimos el movimiento del Cliente
-  socket.on("playerMovement", (data) =>{
+  socket.on("playerMovement", (data) => {
     let selectedPlayer = usuarios.find((item) => item.playerId === socket.id);
     selectedPlayer.x = data.x;
     selectedPlayer.y = data.y;
     //Metemos la animación necesaria
-    selectedPlayer.anim = data.anim
+    selectedPlayer.anim = data.anim;
 
     //Y el giro del personaje
     selectedPlayer.flipX = data.flipX;
 
-    socket.broadcast.emit("playerMoved",selectedPlayer);
-  })
+    socket.broadcast.emit("playerMoved", selectedPlayer);
+  });
+
+  //Manejamos el tema de las desconexiones, este evento lo lanza automaticamente
+  socket.on("disconnect", () => {
+    let disconectedPlayer = usuarios.find((item) => item.playerId === socket.id);
+    if( disconectedPlayer != undefined ){
+
+        //Borramos el elemento del aray de usuarios
+        usuarios.splice(disconectedPlayer, 1);
+
+        //Avisamos a los demas usuarios (para que se borre su personaje)
+        socket.emit("remove",disconectedPlayer);
+    }
+  });
 });
 
 //Lo ponemos a escuchar en el puerto 3000
