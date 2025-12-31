@@ -216,6 +216,7 @@ export class GameScene extends Phaser.Scene {
       this
     );
 
+    //Emitimos mensaje de que el jugador está listo
     this.socket.emit("playerReady");
 
     //Escucha de eventos por si hay un jugador conectado
@@ -236,6 +237,11 @@ export class GameScene extends Phaser.Scene {
         if (player.playerId === data.playerId) {
           player.x = data.x;
           player.y = data.y;
+          player.anims.play(data.anim,true);
+
+          if(data.flipX != undefined) {
+            player.flipX = data.flipX;
+          }
         }
       });
     });
@@ -251,6 +257,8 @@ export class GameScene extends Phaser.Scene {
       this.socket.emit("playerMovement", {
         x: this.player.x,
         y: this.player.y,
+        anim: "left",
+        flipX: true,
       });
       this.player.anims.play("left", true);
     } else if (this.cursors.right.isDown) {
@@ -259,6 +267,8 @@ export class GameScene extends Phaser.Scene {
       this.socket.emit("playerMovement", {
         x: this.player.x,
         y: this.player.y,
+        anim: "right",
+        flipX: false
       });
       this.player.anims.play("right", true);
     } else {
@@ -268,6 +278,7 @@ export class GameScene extends Phaser.Scene {
       this.socket.emit("playerMovement", {
         x: this.player.x,
         y: this.player.y,
+        anim: "turn",
       });
     }
 

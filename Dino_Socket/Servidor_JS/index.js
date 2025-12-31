@@ -41,6 +41,11 @@ io.on("connection", (socket) => {
     let selectedPlayer = usuarios.find((item) => item.playerId === socket.id);
     selectedPlayer.x = data.x;
     selectedPlayer.y = data.y;
+    //Metemos la animación necesaria
+    selectedPlayer.anim = data.anim
+
+    //Y el giro del personaje
+    selectedPlayer.flipX = data.flipX;
 
     socket.broadcast.emit("playerMoved",selectedPlayer);
   })
