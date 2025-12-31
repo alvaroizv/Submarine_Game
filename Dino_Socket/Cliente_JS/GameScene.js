@@ -224,9 +224,8 @@ export class GameScene extends Phaser.Scene {
     //Escuchamos si hay jugadores conectados previamente a nosotros
     this.socket.on("currentPlayers", (userList) => {
       userList.forEach((player) => {
-        
         //Nos aseguramos de que no sea el cliente actual para añadirlo
-        if (player.playerId != this.socket.id) this.addNewPlayer(player);  
+        if (player.playerId != this.socket.id) this.addNewPlayer(player);
       });
     });
   }
@@ -234,11 +233,7 @@ export class GameScene extends Phaser.Scene {
   update() {
     if (this.gameOver) return;
 
-    this.player.oldPositions = {
-      x: this.player.x,
-      y: this.player.y,
-    }
-    console.log(this.player.oldPositions);
+    console.log(this.player.x);
 
     if (this.cursors.left.isDown) {
       this.player.setVelocityX(-500);
@@ -266,8 +261,6 @@ export class GameScene extends Phaser.Scene {
     });
 
     console.log(this.player.x);
-
-
   }
 
   hitObstacle(player, bomb) {
@@ -286,9 +279,13 @@ export class GameScene extends Phaser.Scene {
     this.scene.get("UIScene").mostrarVictoria();
   }
 
-  addNewPlayer(playerConfig){
+  addNewPlayer(playerConfig) {
     //Creo el Sprite del nuevo jugador
-    const newPlayer = this.physics.add.sprite(playerConfig.x, playerConfig.y, "dude");
+    const newPlayer = this.physics.add.sprite(
+      playerConfig.x,
+      playerConfig.y,
+      "dude"
+    );
 
     //Guardo su ID para más adelante en un nuevo atributo
     newPlayer.playerId = playerConfig.playerId;
