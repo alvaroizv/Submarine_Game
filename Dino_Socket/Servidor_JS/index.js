@@ -32,6 +32,15 @@ io.on("connection", (socket) => {
   //Aqui avisamos a los demas de que se ha conectado un nuevo usuario y le pasamos sus datos
   // Con .broadcast para que no emita el mensaje al jugador que emitió ese mensaje
   socket.broadcast.emit("newPlayer",usuarios.find((item) => item.playerId === socket.id));
+
+  //Recibimos el movimiento del Cliente
+  socket.on("playerMovement", (data) =>{
+    let selectedPlayer = usuarios.find((item) => item.playerId === socket.id);
+    selectedPlayer.x = data.x;
+    selectedPlayer.y = data.y;
+
+    socket.broadcast.emit("playerMoved",selectedPlayer);
+  })
 });
 
 //Lo ponemos a escuchar en el puerto 3000

@@ -228,24 +228,45 @@ export class GameScene extends Phaser.Scene {
         if (player.playerId != this.socket.id) this.addNewPlayer(player);
       });
     });
+
+    this.socket.on("playerMoved", (data) => {
+      this.otherPlayers.children.iterate((player) => {
+        if (player.playerId === data.playerId) {
+          player.x = data.x;
+          player.y = data.y;
+        }
+      });
+    });
   }
 
   update() {
     if (this.gameOver) return;
 
-    console.log(this.player.x);
-
     if (this.cursors.left.isDown) {
       this.player.setVelocityX(-500);
       this.player.setFlipX(true);
+
+      this.socket.emit("playerMovement", {
+        x: this.player.x,
+        y: this.player.y,
+      });
       this.player.anims.play("left", true);
     } else if (this.cursors.right.isDown) {
       this.player.setVelocityX(500);
       this.player.setFlipX(false);
+      this.socket.emit("playerMovement", {
+        x: this.player.x,
+        y: this.player.y,
+      });
       this.player.anims.play("right", true);
     } else {
       this.player.setVelocityX(0);
       this.player.anims.play("turn");
+
+      this.socket.emit("playerMovement", {
+        x: this.player.x,
+        y: this.player.y,
+      });
     }
 
     if (this.cursors.up.isDown && this.player.body.touching.down) {
@@ -260,7 +281,6 @@ export class GameScene extends Phaser.Scene {
       }
     });
 
-    console.log(this.player.x);
   }
 
   hitObstacle(player, bomb) {
