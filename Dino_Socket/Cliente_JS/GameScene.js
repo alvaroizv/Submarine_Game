@@ -234,6 +234,14 @@ export class GameScene extends Phaser.Scene {
   update() {
     if (this.gameOver) return;
 
+    //Obtenemos la posicion del jugador actual
+    let old_position = {
+      x: this.player.x,
+      y: this.player.y,
+    }
+
+    console.log(old_position);
+
     if (this.cursors.left.isDown) {
       this.player.setVelocityX(-500);
       this.player.setFlipX(true);
@@ -258,6 +266,10 @@ export class GameScene extends Phaser.Scene {
         bird.y = Phaser.Math.Between(100, 400);
       }
     });
+
+    console.log(this.player.x);
+
+
   }
 
   hitObstacle(player, bomb) {
