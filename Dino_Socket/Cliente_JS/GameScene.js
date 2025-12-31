@@ -234,13 +234,11 @@ export class GameScene extends Phaser.Scene {
   update() {
     if (this.gameOver) return;
 
-    //Obtenemos la posicion del jugador actual
-    let old_position = {
+    this.player.oldPositions = {
       x: this.player.x,
       y: this.player.y,
     }
-
-    console.log(old_position);
+    console.log(this.player.oldPositions);
 
     if (this.cursors.left.isDown) {
       this.player.setVelocityX(-500);
