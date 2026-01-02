@@ -13,7 +13,7 @@ export class UIScene extends Phaser.Scene {
         });
     }
 
-    //Generar Texto de Victoria
+    //Cambiamos mensaje
     changeMessage(msg) {
         this.scoreText.setText(msg);
         this.scoreText.setTint(0x00ff00);
