@@ -62,14 +62,13 @@ export class GameScene extends Phaser.Scene {
     // Suelo principal
     this.platforms.create(2500, 568, "ground").setScale(13, 2).refreshBody();
 
-    // Otras plataformas aleatoriamente:
+    // Otras plataformas
     let xActual = 500;
-    let yActual = 450;
+
     for (let i = 0; i < 20; i++) {
       xActual += 250;
-      yActual += Phaser.Math.Between(-80, 80);
-      if (yActual < 200) yActual = 250;
-      if (yActual > 480) yActual = 400;
+
+      let yActual = i % 2 === 0 ? 400 : 250;
 
       this.platforms
         .create(xActual, yActual, "ground")
@@ -101,7 +100,7 @@ export class GameScene extends Phaser.Scene {
     });
     this.anims.create({
       key: "right",
-      frames: this.anims.generateFrameNumbers("dude", { start: 4, end:   9 }),
+      frames: this.anims.generateFrameNumbers("dude", { start: 4, end: 9 }),
       frameRate: 10,
       repeat: -1,
     });
@@ -127,16 +126,16 @@ export class GameScene extends Phaser.Scene {
     this.rocks = this.physics.add.group();
     let xRocaActual = 600;
     for (let i = 0; i < 80; i++) {
-      xRocaActual += Phaser.Math.Between(200, 400);
+      xRocaActual += 300;
       if (xRocaActual < 4900) {
-        let rock = this.rocks.create(xRocaActual, 520, "rock");
+        this.rocks.create(xRocaActual, 520, "rock");
       }
     }
 
     // Rocas de las plataformas (caen del cielo)
     let xRocaCielo = 600;
     for (let i = 0; i < 25; i++) {
-      xRocaCielo += Phaser.Math.Between(120, 200);
+      xRocaCielo += 160; // Distancia fija
       if (xRocaCielo < 4900) {
         let rock = this.rocks.create(xRocaCielo, 0, "rock");
         rock.body.setSize(20, 20);
@@ -146,16 +145,20 @@ export class GameScene extends Phaser.Scene {
     // Creamos los pájaros del juego
     this.birds = this.physics.add.group();
     for (let i = 0; i < 5; i++) {
-      let bird = this.birds.create(
-        Phaser.Math.Between(800, 5000),
-        Phaser.Math.Between(100, 400),
-        "bird"
-      );
+
+      let xBird = 1000 + i * 800;
+
+      let alturas = [150, 250, 350];
+      let yBird = alturas[i % alturas.length];
+
+      let bird = this.birds.create(xBird, yBird, "bird");
 
       bird.anims.play("fly", true);
       bird.setScale(2);
       bird.body.allowGravity = false;
-      bird.setVelocityX(Phaser.Math.Between(-150, -250));
+
+      let velX = i % 2 === 0 ? -150 : -250;
+      bird.setVelocityX(velX);
     }
 
     // Creamos la Bandera
@@ -193,7 +196,7 @@ export class GameScene extends Phaser.Scene {
     this.otherPlayers = this.physics.add.group();
 
     this.physics.add.collider(this.otherPlayers, this.platforms);
-    this.physics.add.collider(this.otherPlayers,this.player);
+    this.physics.add.collider(this.otherPlayers, this.player);
 
     this.physics.add.collider(
       this.otherPlayers,
@@ -307,9 +310,8 @@ export class GameScene extends Phaser.Scene {
   }
 
   hitObstacle(player, bomb) {
-
     if (this.gameOver) return;
-    
+
     this.physics.pause();
     this.player.anims.play("dead", true);
     this.gameOver = true;
@@ -320,11 +322,11 @@ export class GameScene extends Phaser.Scene {
     this.socket.emit("playerDied");
   }
 
-  hitRemoteObstacle(player, obstacle){
+  hitRemoteObstacle(player, obstacle) {
     //En player tenemos la variable del jugador que la ha activado
     console.log("You are Dead");
-    
-    player.anims.play("dead",true);
+
+    player.anims.play("dead", true);
   }
 
   finishGame(player, flag) {
