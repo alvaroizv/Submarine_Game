@@ -14,14 +14,8 @@ export class UIScene extends Phaser.Scene {
     }
 
     //Generar Texto de Victoria
-    mostrarVictoria() {
-        this.scoreText.setText("You Won!");
+    changeMessage(msg) {
+        this.scoreText.setText(msg);
         this.scoreText.setTint(0x00ff00);
-    }
-
-    // Generar Texto de Derrota
-    mostrarMuerte() {
-        this.scoreText.setText("GAME OVER");
-        this.scoreText.setTint(0xff0000);
     }
 }

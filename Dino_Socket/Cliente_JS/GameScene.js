@@ -329,7 +329,7 @@ export class GameScene extends Phaser.Scene {
     this.gameOver = true;
 
     //Llamamos a la UI para que cambie el mensaje
-    this.scene.get("UIScene").mostrarMuerte();
+    this.scene.get("UIScene").changeMessage("You Died");
 
     this.socket.emit("playerDied");
   }
@@ -343,7 +343,7 @@ export class GameScene extends Phaser.Scene {
     this.player.anims.play("turn", true);
     this.gameWon = true;
 
-    this.scene.get("UIScene").mostrarVictoria();
+    this.scene.get("UIScene").changeMessage("You Won");
 
     this.socket.emit("playerWon");
   }
