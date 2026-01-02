@@ -145,7 +145,6 @@ export class GameScene extends Phaser.Scene {
     // Creamos los pájaros del juego
     this.birds = this.physics.add.group();
     for (let i = 0; i < 5; i++) {
-
       let xBird = 1000 + i * 800;
 
       let alturas = [150, 250, 350];
@@ -259,6 +258,15 @@ export class GameScene extends Phaser.Scene {
         playerToDelete.destroy();
       }
     });
+
+    this.socket.on("playerDied", (data) => {
+      const playerDied = this.otherPlayers
+        .getChildren()
+        .find((p) => p.playerId === data.playerId);
+      if (playerDied) {
+        playerDied.anims.play("dead", true);
+      }
+    });
   }
 
   update() {
@@ -323,10 +331,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   hitRemoteObstacle(player, obstacle) {
-    //En player tenemos la variable del jugador que la ha activado
-    console.log("You are Dead");
-
-    player.anims.play("dead", true);
+    player.setVelocity(0);
   }
 
   finishGame(player, flag) {

@@ -58,7 +58,7 @@ io.on("connection", (socket) => {
   //Manejamos el tema de las desconexiones, este evento lo lanza automaticamente
   socket.on("disconnect", () => {
     console.log(usuarios);
-    let index = usuarios.findIndex((item) => item.playerId === socket.id)
+    let index = usuarios.findIndex((item) => item.playerId === socket.id);
     if (index != -1) {
       //Buscamos por el índice al usuario a desconectar
       const disconectedPlayer = usuarios[index];
@@ -69,6 +69,15 @@ io.on("connection", (socket) => {
 
       //Avisamos a los demas usuarios (para que se borre su personaje)
       socket.broadcast.emit("remove", disconectedPlayer);
+    }
+  });
+
+  socket.on("playerDied", () => {
+    let selectedPlayer = usuarios.find((item) => item.playerId === socket.id);
+
+    if (selectedPlayer != undefined) {
+      console.log("Ha muerto el jugador numero 2")
+      socket.broadcast.emit("playerDied",selectedPlayer);
     }
   });
 });
