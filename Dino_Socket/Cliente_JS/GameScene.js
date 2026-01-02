@@ -101,7 +101,7 @@ export class GameScene extends Phaser.Scene {
     });
     this.anims.create({
       key: "right",
-      frames: this.anims.generateFrameNumbers("dude", { start: 4, end: 9 }),
+      frames: this.anims.generateFrameNumbers("dude", { start: 4, end:   9 }),
       frameRate: 10,
       repeat: -1,
     });
@@ -247,16 +247,13 @@ export class GameScene extends Phaser.Scene {
     });
 
     this.socket.on("remove", (data) => {
-      this.otherPlayers.children.iterate((player) => {
-        if (player.playerId === data.playerId) {
-          
+      const playerToDelete = this.otherPlayers
+        .getChildren()
+        .find((p) => p.playerId === data.playerId);
 
-
-          if (data.flipX != undefined) {
-            player.flipX = data.flipX;
-          }
-        }
-      });
+      if (playerToDelete) {
+        playerToDelete.destroy();
+      }
     });
   }
 

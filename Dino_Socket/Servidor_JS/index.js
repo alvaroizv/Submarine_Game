@@ -42,27 +42,33 @@ io.on("connection", (socket) => {
   //Recibimos el movimiento del Cliente
   socket.on("playerMovement", (data) => {
     let selectedPlayer = usuarios.find((item) => item.playerId === socket.id);
-    selectedPlayer.x = data.x;
-    selectedPlayer.y = data.y;
-    //Metemos la animación necesaria
-    selectedPlayer.anim = data.anim;
+    if (selectedPlayer != undefined) {
+      selectedPlayer.x = data.x;
+      selectedPlayer.y = data.y;
+      //Metemos la animación necesaria
+      selectedPlayer.anim = data.anim;
 
-    //Y el giro del personaje
-    selectedPlayer.flipX = data.flipX;
+      //Y el giro del personaje
+      selectedPlayer.flipX = data.flipX;
 
-    socket.broadcast.emit("playerMoved", selectedPlayer);
+      socket.broadcast.emit("playerMoved", selectedPlayer);
+    }
   });
 
   //Manejamos el tema de las desconexiones, este evento lo lanza automaticamente
   socket.on("disconnect", () => {
-    let disconectedPlayer = usuarios.find((item) => item.playerId === socket.id);
-    if( disconectedPlayer != undefined ){
+    console.log(usuarios);
+    let index = usuarios.findIndex((item) => item.playerId === socket.id)
+    if (index != -1) {
+      //Buscamos por el índice al usuario a desconectar
+      const disconectedPlayer = usuarios[index];
+      //Borramos el elemento del aray de usuarios
 
-        //Borramos el elemento del aray de usuarios
-        usuarios.splice(disconectedPlayer, 1);
+      console.log("Usuario desconectado", disconectedPlayer);
+      usuarios.splice(index, 1);
 
-        //Avisamos a los demas usuarios (para que se borre su personaje)
-        socket.emit("remove",disconectedPlayer);
+      //Avisamos a los demas usuarios (para que se borre su personaje)
+      socket.broadcast.emit("remove", disconectedPlayer);
     }
   });
 });
