@@ -135,7 +135,7 @@ export class GameScene extends Phaser.Scene {
     // Rocas de las plataformas (caen del cielo)
     let xRocaCielo = 600;
     for (let i = 0; i < 25; i++) {
-      xRocaCielo += 160; // Distancia fija
+      xRocaCielo += 160; 
       if (xRocaCielo < 4900) {
         let rock = this.rocks.create(xRocaCielo, 0, "rock");
         rock.body.setSize(20, 20);

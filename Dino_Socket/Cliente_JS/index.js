@@ -2,6 +2,7 @@
 import * as Phaser from "./node_modules/phaser/dist/phaser.esm.js";
 import {GameScene} from "./GameScene.js";
 import { UIScene } from "./UIScene.js";
+import { UI } from "./UI.js";
 
 // Configuración del juego:
 var config = {
@@ -21,4 +22,6 @@ var config = {
 // Inicializamos el juego :
 const game = new Phaser.Game(config);
 
+const ui = new UI("restart",game);
+ui.addEvents();
 
