@@ -198,14 +198,14 @@ export class GameScene extends Phaser.Scene {
     this.physics.add.collider(
       this.otherPlayers,
       this.birds,
-      this.hitObstacle,
+      this.hitRemoteObstacle,
       null,
       this
     );
     this.physics.add.overlap(
       this.otherPlayers,
       this.rocks,
-      this.hitObstacle,
+      this.hitRemoteObstacle,
       null,
       this
     );
@@ -307,11 +307,24 @@ export class GameScene extends Phaser.Scene {
   }
 
   hitObstacle(player, bomb) {
+
+    if (this.gameOver) return;
+    
     this.physics.pause();
     this.player.anims.play("dead", true);
     this.gameOver = true;
+
     //Llamamos a la UI para que cambie el mensaje
     this.scene.get("UIScene").mostrarMuerte();
+
+    this.socket.emit("playerDied");
+  }
+
+  hitRemoteObstacle(player, obstacle){
+    //En player tenemos la variable del jugador que la ha activado
+    console.log("You are Dead");
+    
+    player.anims.play("dead",true);
   }
 
   finishGame(player, flag) {
