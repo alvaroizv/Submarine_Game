@@ -1,3 +1,57 @@
+**PRACTICA 3: Juego del Dinosaurio con Phaser y Socket.io**
+
+Buenos días/tardes/noches, Raúl, dependiendo de la hora a la que mires esto.
+
+NOTA: Escribo esto sin tener rúbrica de corrección del proyecto, se adjuntarán cambios más adelante
+
+La verdad que este es el proyecto que más desafiante me ha parecido, ya que aún tener unas buenas referencias con el fichero que nos pasastes sobre WebSockets, he tenido que investigar mucho por mi cuenta para llegar a terminar el proyecto.
+
+Creo que la clave en el éxito fue el ir todo paso por paso, no lanzarse como loco sin ton ni son a picar codigo o probar cosas.
+
+Empecé investigando más a fondo Socket.io :
+
+-Funcionamiento de emisiones/recepciones de evento
+- Conexiones entre usuarios
+- Recepción y envío de datos
+- ...
+
+Una vez que aprendí lo necesario para tener una buena base, comencé a investigar acerca de Phaser.js, sobretodo en su documentación oficial.Ahí encontré un tutorial de como crear tu primer videojuego, era muy básico pero muy util, pues te enseñaba las bases de la librería, y eso era lo que yo necesitaba
+
+Lo siguiente que hice fue comenzar a hacer el juego en sí para un jugador, cambié los assets, introduje las rocas, los pájaros, la cámara .... Esto me llevó bastante tiempo, pero cada vez menos al ser un proceso "repetitivo", sobretodo el tema de las físicas y los colliders.
+
+Una vez tuve todo el juego hecho separé las Escenas en UIScene y GameScene para más claridad y modularidad, en la bibliografía te adjunto el ejemplo que seguí.
+
+Después y tras muchas horas, tenía el juego base. A partir de este punto, me puse con el multiplayer (Socket.io), al ya tener la base de la recepción/emisión, en un principio no parecía muy dificil, excepto el empezar en sí:
+¿Cómo iba yo a mostrar un personaje al conectarse una persona?¿Y si la persona se une de segundas, como cargo los jugadores correspondientes?
+Estas 2 preguntas me llevaron mucho tiempo pensando, hasta que visitando algunos foros y viendo el array de usuarios que tu nos dejaste preparado, se me encendió la bombilla.
+
+Una vez resuelto esto me sentía "un gurú de JavaScript", hasta que llegó algo que no esperaba : EL MOVIMIENTO DE LOS USUARIOS
+
+Esto sin duda es lo que más tiempo me costó (en los commits se puede ver) , ya que sabía que tenía que mandar las posiciones de los jugadores pero, ¿Cúando?¿Espero a que cambie la posición o mando todo automáticamente?
+Entre esto y varias preguntas más fue sin duda lo que más me costó, al final lo he hecho de manera que siempre que te muevas mandes las coordenadas a los demás jugadores, cambiando la posición en el array de usuarios 
+y luego en los usuarios en sí (socket.on en el cliente)
+
+Luego una vez pasado este gran bache, vino el modificar las condiciones de Desconexiones,Muerte de Usuario y Victoria de Usuario (Que comparado con lo otro, fue bastante más sencillo)
+
+Al final si que llevabas razón, y fueron 5 días de desarrollo.
+
+Hay muchas cosas que se pueden cambiar/mejorar, como que los dinosaurios fueran diferentes o que empiecen la "carrera" todos a la vez, o incluso un sistema de vidas.... pero al no tener la rúbrica, tampoco se por donde avanzar.
+
+Me ha costado menos de lo que me imaginaba en un principio pero muchísimo más que el Simon, que comparado con esto se me hace hasta sencillo.
+
+Para finalizar te adjunto una pequeña bibliografía de algunos enlaces interesantes que visité a lo largo del desarrollo del proyecto. Un Abrazo y Feliz Año Nuevo!!
+
+- https://phaser.io/tutorials/making-your-first-phaser-3-game-spanish/part2  (Tutorial de juego base) 
+- https://phaser.io/examples/v3.85.0/scenes/view/multiple-scenes-from-classes  (Separación de Escenas)
+- https://www.dynetisgames.com/2017/03/06/how-to-make-a-multiplayer-online-game-with-phaser-socket-io-and-node-js/ (Inspiración para el movimiento y desconexiones)
+- https://www.html5gamedevs.com/topic/30784-how-to-detect-if-user-is-closing-game/  (Eventos de escucha de dexconexiones)
+- https://phaser.io/examples/v3.55.0/input/game-object/view/destroy-sprite-on-down-event (Eliminar los sprites al desconectarse los usuarios)
+- https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Array/splice (Método array.splice desde MozillaJS para sacar de la lista a los usuarios que se han desconectad)
+
+
+
+
+
 **PRACTICA 2: SIMÓN**
 Buenos días/tardes/noches, Raúl, dependiendo de la hora a la que mires esto.
 
