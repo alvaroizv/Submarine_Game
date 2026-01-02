@@ -18,7 +18,6 @@ io.attachApp(app);
 //Establecemos un evento al conectarse una persona
 io.on("connection", (socket) => {
   console.log("Nuevo dinosaurio conectado");
-  console.log(usuarios);
 
   usuarios.push({
     playerId: socket.id,
@@ -80,6 +79,16 @@ io.on("connection", (socket) => {
       socket.broadcast.emit("playerDied",selectedPlayer);
     }
   });
+
+  socket.on("playerWon", () => {
+    let selectedPlayer = usuarios.find((item) => item.playerId === socket.id);
+
+    if (selectedPlayer != undefined) {
+      console.log("Ha ganado el jugador numero 7")
+      socket.broadcast.emit("playerWon",selectedPlayer);
+    }
+  });
+
 });
 
 //Lo ponemos a escuchar en el puerto 3000

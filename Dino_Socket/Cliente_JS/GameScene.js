@@ -214,7 +214,7 @@ export class GameScene extends Phaser.Scene {
     this.physics.add.overlap(
       this.otherPlayers,
       this.flags,
-      this.finishGame,
+      this.finishRemoteGame,
       null,
       this
     );
@@ -260,12 +260,16 @@ export class GameScene extends Phaser.Scene {
     });
 
     this.socket.on("playerDied", (data) => {
-      const playerDied = this.otherPlayers
-        .getChildren()
-        .find((p) => p.playerId === data.playerId);
+      const playerDied = this.otherPlayers.getChildren().find((p) => p.playerId === data.playerId);
       if (playerDied) {
         playerDied.anims.play("dead", true);
       }
+    });
+
+    this.socket.on("playerWon", (data) => {
+      this.otherPlayers.children.iterate((player) => {
+        this.scene.get("UIScene").mostrarMuerte();
+      });  
     });
   }
 
@@ -340,6 +344,13 @@ export class GameScene extends Phaser.Scene {
     this.gameWon = true;
 
     this.scene.get("UIScene").mostrarVictoria();
+
+    this.socket.emit("playerWon");
+  }
+
+  finishRemoteGame(player,flag){
+    this.physics.pause();
+    player.setVelocity(0);
   }
 
   addNewPlayer(playerConfig) {
